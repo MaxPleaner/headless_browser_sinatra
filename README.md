@@ -9,5 +9,4 @@ To install dependencies and set up the correct Firebox binary, run `install.sh`.
 
 After this is done, run `ruby start_server.rb` and visit `localhost:4567?url=google` in the browser.
 
-The value for the `url` param is the name of a website. I.e. `google` would visit `http://google.com` and the result would be the string `Google`
-printed to the browser as a response. This is the html title of the page which was visited. 
+

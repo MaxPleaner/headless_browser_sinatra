@@ -50,7 +50,7 @@ class Routes < Sinatra::Base
       @screenshot = Browser.screenshot # generate a new screenshot
     rescue HeadlessBrowserError => e
       @screenshot = "screenshot.jpg" # show the last used screenshot
-      @error = "#{e}#{e.message}#{e.backtrace}"
+      @error = "Error: #{e}"
     end
     erb :root
   end
