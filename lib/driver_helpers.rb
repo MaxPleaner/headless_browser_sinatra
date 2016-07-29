@@ -22,8 +22,7 @@ class DriverHelpers
     @scripts_been_sent = {}
     # send jquery and the on click script to every page
     send_static_script("./public/jquery.js")
-    driver.execute_script(on_click_script)
-    @scripts_been_sent = { 'jquery' => true, 'on_click' => true }
+    @scripts_been_sent = { 'jquery' => true }
   end
   
    # Click an element on the page based on a CSS selector
@@ -44,6 +43,12 @@ class DriverHelpers
   # Click x,y coordinates on the page
   def click_coords(x, y)
     return unless driver_has_current_page?
+    # send jquery unless it's already loaded
+    is_jquery_loaded = driver.execute_script("return typeof($)") == 'function'
+    send_static_script("./public/jquery.js") unless is_jquery_loaded
+    # always send the on click script in case the listeners were destroyed
+    driver.execute_script(on_click_script)
+    @scripts_been_sent["on_click"] = true
     javascript_code = <<-JS
       var x = #{x};
       var y = #{y};
@@ -67,10 +72,12 @@ class DriverHelpers
     script = <<-JS
       var element = window.lastSelectedElement
       if (element) {
+        var $el = $(element)
+        $el.val("")
+        $el.text("")
         $(element).autotype("#{text}")
       }
     JS
-    byebug
     driver.execute_script(script)
   end
   
@@ -97,10 +104,11 @@ class DriverHelpers
   def on_click_script
     return unless driver_has_current_page?
     <<-JS
-     $("input, textarea").on("click", function(e) {
+    // call 'off' before 'on' to avoid duplicate listeners
+     $("input, textarea").off("click").on("click", function(e) {
        var $el = $(e.currentTarget);
        window.lastSelectedElement = $el[0]
-       true
+       return true
      })
     JS
   end
