@@ -29,9 +29,10 @@ class HeadlessBrowser
   # Take the params from the controller and interpret them to execute code
   def process_params(params)
     given_params = {}
-    given_params[:coords] = params[:click_coords]&.split(",")
-    given_params[:url]    = params[:url]
-    given_params[:text]   = params[:enter_text]
+    given_params[:coords]  = params[:click_coords]&.split(",")
+    given_params[:url]     = params[:url]
+    given_params[:text]    = params[:enter_text]
+    given_params[:refresh] = params[:refresh]
     given_params.each do |name, val|
       val && send_param(name, val)
     end
@@ -47,6 +48,8 @@ class HeadlessBrowser
       @driver_helpers.navigate(val)
     when :text
       @driver_helpers.enter_text(val)
+    when :refresh
+      @driver_helpers.refresh
     end
   end
   

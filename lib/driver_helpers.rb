@@ -84,6 +84,7 @@ class DriverHelpers
   # Refresh the page
   def refresh
     return unless driver_has_current_page?
+    driver.execute_script("window.location.reload()")
   end
   
   # Sends a static script such as jquery

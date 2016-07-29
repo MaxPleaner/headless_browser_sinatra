@@ -2,13 +2,18 @@
 
 <form action="/">
   <input type="text" name="url">
-  <input type="submit" value="type website name i.e. gmail">
+  <input type="submit" value="type website name i.e. gmail or http://gmail.com">
 </form>
 
 
 <form action="/">
   <input type="text" name="enter_text">
   <input type="submit" value="send text to selected node">
+</form>
+
+<form action="/">
+  <input type="hidden" name="refresh" value="true">
+  <input type="submit" value="refresh"> <i>Try this if facing any bugs, such as the page going blank</i>
 </form>
 
 <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
