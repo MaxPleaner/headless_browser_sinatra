@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install dependencies
+sudo apt-get install xfvb
+
 # Download
 wget https://ftp.mozilla.org/pub/firefox/releases/46.0/firefox-46.0.linux-x86_64.sdk.tar.bz2
 
