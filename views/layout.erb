@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<title> headless_browser_sinatra </title>
+<style>
+  body, html {
+    height: 100%; width: 100%;
+  }
+  .navbar {
+    width: 90%;
+    border: 1px solid black; padding: 5px;
+  }
+  .navbar-item {
+    border: 1px solid black; padding: 5px;
+    display: inline-block;
+  }
+  #page-screenshot {
+    border: 1px solid black;
+    margin: 10px;
+  }
+</style>
+<script src="jquery.js"></script>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="navbar-item">
+    <b><a href="/">headless_browser_sinatra</a></b>
+  </div>
+  <div class="navbar-item">
+    <a href="http://github.com/maxpleaner/headless_browser_sinatra">
+      Github
+    </a>
+  </div>
+</div>
+
+<%= yield %>
+
+<script>
+  $('img').click(function(e) {
+    var offset = $(this).offset();
+    var x = e.pageX - offset.left;
+    var y = e.pageY - offset.top;
+    window.location = `http://localhost:4567?click_coords=${x},${y}`
+  });
+</script>
+</body>
+</html>
