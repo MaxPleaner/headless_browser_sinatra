@@ -9,7 +9,7 @@ sleep 5
 # - xfvb: headless x gui
 # - imagemagick: image manipulation
 # - x11-apps: installs xwd for screenshots
-sudo apt-get install xfvb imagemagick x11-apps
+sudo apt-get install xvfb imagemagick x11-apps
 
 # Download
 wget https://ftp.mozilla.org/pub/firefox/releases/46.0/firefox-46.0.linux-x86_64.sdk.tar.bz2
