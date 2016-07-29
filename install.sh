@@ -21,7 +21,7 @@ tar -xvf firefox-46.0.linux-x86_64.sdk.tar.bz2
 rm firefox-46.0.linux-x86_64.sdk.tar.bz2
 
 # Rename
-mv firefox-46-0.linux-x86_64 lib/firefox-sdk
+mv firefox-sdk lib/
 
 # Symlink
 cd lib
