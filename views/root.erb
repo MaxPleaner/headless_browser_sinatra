@@ -34,24 +34,5 @@
   </i>
 </form>
 
-<%# Form to turn on sending of the on-click script %>
-<%# The on-click script will be automatically turned off it it fails %>
-<%# If it is turned off, it should remain off while the current page is loaded %>
-<%# Text entry should continue to work %>
-<%# If a different page is then requested, text entry will not work %>
-<%# This form should be submitted to fix the issue %>
-<form action="/">
-  <input type="hidden" name="reenable_on_click_script" value="true">
-  <input type="submit" value="re-enable sending on-click script repeatedly">
-  <i>
-    It is the default behavior to send the on-click listener (which enables typing text) every time a click
-    event occurs.Since websites can clear their DOM event listeners at will, sending the on-click script repeatedly
-    ensures that the listeners are active. On certain sites, though, it needs to be send once-and-only-once, and will
-    automatically disable re-sending if there is an error. If this happens and then  a completely different website is
-    then requested, the on-click listeners will not send and there will be no way to enter text. If this situation occurs
-    , click this button.
-  </i>
-</form>
-
 <%# The current screenshot of the active Firefox page %>
 <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
