@@ -14,23 +14,7 @@
     HeadlessBrowser.start_driver
   )
   driver_helpers = browser.driver_helpers
-  
-  # run selenium commands (chainable)
-  driver_helpers.navigate("http://google.com")
-                .ensure_current_page_exists
-                .click_selector("input")
-                .click_coords(0,0)
-                .enter_text("foobar")
-                .refresh
-                .refresh_failsafe
-                .send_jquery_if_undefined
-                .find_element_with_selector("input")
-  
-  # a few other commands (not chainable)
-  driver_helpers.driver_has_current_page?
-  driver_helpers.send_static_script("./public/jquery.js")
-  underlying_driver = driver_helpers.driver
-  underlying_driver.execute_script(driver_helpers.on_click_script)
+  # then call some instance methods
   
 =end
 

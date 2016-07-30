@@ -1,38 +1,49 @@
-<%# show errors if any exist %>
-<%# this is used to pass generic messages as well %>
-<%= @error %>
+<div id="errors">
+  <%# show errors if any exist %>
+  <%# this is used to pass generic messages as well %>
+  <%= @error %>
+</div>
 
-<%# Form to navigate to a url %>
-<form action="/">
-  <input type="text" name="url">
-  <input type="submit" value="type website name i.e. gmail or http://gmail.com">
-</form>
+<div id="forms-container">
+  
+  <div id="refresh-form">
+    <%# Form to refresh the firefox page %>
+    <form action="/">
+      <input type="hidden" name="refresh" value="true">
+      <input type="submit" value="refresh">
+    </form>
+  </div>
+  
+  <div id="navigate-form">
+    <%# Form to navigate to a url %>
+    <form action="/">
+      <input type="text" name="url" placeholder="url goes here"> <br>
+      <input type="submit" value="go to url">
+    </form>
+  </div>
+  
+  <div id="send-text-form">
+    <%# Form to send text to a selected node %>
+    <%# Before doing this, an input should be clicked on the firefox page %>
+    <form action="/">
+      <input type="text" name="enter_text" placeholder="text goes here"><br>
+      <input type="submit" value="send text">
+    </form>
+  </div>
+  
+  <div id="delay-screenshot-form">
+    <%# Form to set the 'delay_screenshot' setting on the server %>
+    <%# This will delay taking a screenshot for n seconds to ensure the page has loaded %>
+    <form action="/">
+      <input type="number" name="delay_screenshot" placeholder="number of seconds"><br>
+      <input type="submit" value="delay screenshot">
+    </form>
+  </div>
 
-<%# Form to send text to a selected node %>
-<%# Before doing this, an input should be clicked on the firefox page %>
-<form action="/">
-  <input type="text" name="enter_text">
-  <input type="submit" value="send text to selected node">
-</form>
+  <div class="clearfix"></div>
+</div> <!-- #forms-container -->
 
-<%# Form to refresh the firefox page %>
-<form action="/">
-  <input type="hidden" name="refresh" value="true">
-  <input type="submit" value="refresh">
-  <i>
-    Try this if facing any bugs, such as the page going blank
-  </i>
-</form>
-
-<%# Form to set the 'delay_screenshot' setting on the server %>
-<%# This will delay taking a screenshot for n seconds to ensure the page has loaded %>
-<form action="/">
-  <input type="number" name="delay_screenshot">
-  <input type="submit" value="delay screenshot">
-  <i> Wait n additional seconds before taking screenshots.
-    It will take longer to respond to commands, but the screenshots will be more accurate. Recommended value: 2
-  </i>
-</form>
-
-<%# The current screenshot of the active Firefox page %>
-<img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
+<div id="current-screenshot">
+  <%# The current screenshot of the active Firefox page %>
+  <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
+</div>
