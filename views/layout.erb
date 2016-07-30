@@ -2,99 +2,7 @@
 <html lang='en'>
 <head>
 <title> headless_browser_sinatra </title>
-<style>
-
-  /* Body and HTML */
-  body, html {
-    height: 100%; width: 100%;
-    background-color: black;
-    color: lightgreen;
-  }
-  
-  /* input Style */
-  input[type='text'], input[type='number'] {
-    background-color: grey;
-  }
-
-  /* Navbar at the top */
-  .navbar {
-    display: inline-block;
-    border: 1px solid purple; padding: 5px;
-    margin: 20px;
-  }
-  
-  /* links */
-  a:visited, a {
-    color: aqua;
-  }
-  
-  /* An individual link in the navbar */
-  .navbar-item {
-    display: inline-block;
-    margin: 10px;
-  }
-  .navbar-item a:hover {
-    text-shadow: 0 0 30px white;
-  }
-  
-  /* Styling for the screenshot img */
-  #page-screenshot {
-    border: 1px solid black;
-    margin: 10px;
-  }
-  
-  /* Errors and messages */
-  #errors {
-    
-  }
-  
-  /* Container for forms */
-  #forms-container {
-    margin: 10px;
-    width: 900px;
-    padding: 10px;
-  }
-  #forms-container form {
-    display: inline-block;
-    float: left;
-    margin: 10px;
-    padding: 10px;
-  }
-  #forms-container form input {
-    width: 150px;
-  }
-  
-  /* clearfix */
-  .clearfix {
-    clear: both;
-  }
-  
-  /* Form to visit a url */
-  #navigate-form {
-    
-  }
-  
-  /* Form to send text */
-  #send-text-form {
-    
-  }
-  
-  /* Form to refresh firefox */
-  #refresh-form {
-    
-  }
-  
-  /* Form to change delay_screenshot setting */
-  #delay-screenshot-form {
-    
-  }
-  
-  /* Current screenshot img */
-  #current-screenshot {
-    
-  }
-  
-</style>
+<link rel="stylesheet" href="./style.css">
 <script src="jquery.js"></script>
 </head>
 <body>
@@ -121,12 +29,14 @@
   If an input is clicked, it will be tracked as 'window.lastSelectedElement'
   and will be considered the target location for text entry`
   
-  $('img').click(function(e) {
-    var offset = $(this).offset();
-    var x = e.pageX - offset.left;
-    var y = e.pageY - offset.top;
-    window.location = `http://localhost:4567?click_coords=${x},${y}`
-  });
+  $(function() {
+    $('img').click(function(e) {
+      var offset = $(this).offset();
+      var x = e.pageX - offset.left;
+      var y = e.pageY - offset.top;
+      window.location = `http://localhost:4567?click_coords=${x},${y}`
+    });
+  })
   
 </script>
 </body>

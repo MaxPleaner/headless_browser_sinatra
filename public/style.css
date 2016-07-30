@@ -1,0 +1,90 @@
+F/* Body and HTML */
+body, html {
+  height: 100%; width: 100%;
+  background-color: black;
+  color: lightgreen;
+}
+
+/* input Style */
+input[type='text'], input[type='number'] {
+  background-color: white;
+}
+
+/* Navbar at the top */
+.navbar {
+  display: inline-block;
+  border: 1px solid purple; padding: 5px;
+  margin: 20px;
+}
+
+/* links */
+a:visited, a {
+  color: aqua;
+}
+
+/* An individual link in the navbar */
+.navbar-item {
+  display: inline-block;
+  margin: 10px;
+}
+.navbar-item a:hover {
+  text-shadow: 0 0 30px white;
+}
+
+/* Styling for the screenshot img */
+#page-screenshot {
+  border: 1px solid black;
+  margin: 10px;
+}
+
+/* Errors and messages */
+#errors {
+  
+}
+
+/* Container for forms */
+#forms-container {
+  margin: 10px;
+  width: 900px;
+  padding: 10px;
+}
+#forms-container form {
+  display: inline-block;
+  float: left;
+  margin: 10px;
+  padding: 10px;
+}
+#forms-container form input {
+  width: 150px;
+}
+
+/* clearfix */
+.clearfix {
+  clear: both;
+}
+
+/* Form to visit a url */
+#navigate-form {
+  
+}
+
+/* Form to send text */
+#send-text-form {
+  
+}
+
+/* Form to refresh firefox */
+#refresh-form {
+  
+}
+
+/* Form to change delay_screenshot setting */
+#delay-screenshot-form {
+  
+}
+
+/* Current screenshot img */
+#current-screenshot {
+  
+}
+
