@@ -2,11 +2,16 @@
 # Included by lib/headless_browser.rb
 class DriverHelpers
   
-  attr_reader :driver, :scripts_been_sent
+  attr_reader   :driver, :scripts_been_sent
+  attr_accessor :should_send_click_listeners
+  
   def initialize(driver)
     @driver = driver
     @scripts_been_sent = {} # avoid re-sending large scripts to the same page
                             # i.e. jquery, jquery.autotype
+                            
+    @should_send_click_listeners = true # on click is sent upon every click
+                                        # to ensure that the event listeners are defined
   end
   
   
@@ -18,6 +23,8 @@ class DriverHelpers
   # raise an error unless there's a current page
   def ensure_current_page_exists
     unless driver_has_current_page?
+      # remove the last screenshot as it's not loaded anymore
+      `rm public/screenshot.jpg`
       raise(HeadlessBrowserError, "browser has not visited any websites yet")
     end
   end
@@ -53,8 +60,15 @@ class DriverHelpers
     # send jquery unless it's already loaded
     is_jquery_loaded = driver.execute_script("return typeof($)") == 'function'
     send_static_script("./public/jquery.js") unless is_jquery_loaded
-    # always send the on click script in case the listeners were destroyed
-    driver.execute_script(on_click_script)
+    # always try and send the on click script in case the listeners were destroyed
+    begin
+      driver.execute_script(on_click_script) if @should_send_click_listeners
+    rescue Selenium::WebDriver::Error::JavascriptError
+      # don't try and use attr reader / writer in rescue blocks, they won't work. This was painful to debug.
+      @should_send_click_listeners = false
+      refresh_failsafe # Refresh the page using Selenium API. Firefox's JS environment resets.
+      raise(HeadlessBrowserError, "Error with on click script. Disabling, please refresh the page and try again")
+    end
     @scripts_been_sent["on_click"] = true
     javascript_code = <<-JS
       var x = #{x};
@@ -88,10 +102,15 @@ class DriverHelpers
     driver.execute_script(script)
   end
   
-  # Refresh the page
+  # Refresh the page using Javascript
   def refresh
     ensure_current_page_exists
     driver.execute_script("window.location.reload()")
+  end
+  
+  # Refresh the page using selenium's API, in case of halting Javascript errors
+  def refresh_failsafe
+    navigate(driver.current_url)
   end
   
   # Sends a static script such as jquery

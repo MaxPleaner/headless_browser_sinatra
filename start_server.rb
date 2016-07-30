@@ -39,19 +39,30 @@ end
 # custom error class for the headless browser
 class HeadlessBrowserError < StandardError; end
   
+# use raise / rescue to pass around generic messages as well
+class HeadlessBrowserMessage < StandardError; end
+  
 # modular sinatra routes
 class Routes < Sinatra::Base
   
   # root route
   get '/' do
+    # don't wait a full minute before raising an error if Firefox is unresponsive
+    # although this occasionally fails, it seems to be temporary and refreshing the page can help.
     RoutesInit.connect_to_firefox_with_timeout(20)
     begin
-      Browser.process_params(params)
-      @screenshot = Browser.screenshot # generate a new screenshot
+      # execute commands on the headless browser by interpreting the params
+      # generate a new screenshot or don't, depending on the commands being run
+      should_send_screenshot = Browser.process_params(params)
+      @screenshot = should_send_screenshot ? Browser.screenshot : @screenshot
     rescue HeadlessBrowserError => e
-      @screenshot = "screenshot.jpg" # show the last used screenshot
+      @screenshot = "screenshot.jpg" # show the last used screenshot in case of an error
       @error = "Error: #{e}"
+    rescue HeadlessBrowserMessage => e # not really an error, but passed as such
+      @screenshot = "screenshot.jpg" # show the last used screenshot
+      @error = "Message: #{e}"
     end
+    # render views/root.erb
     erb :root
   end
   

@@ -13,7 +13,31 @@
 
 <form action="/">
   <input type="hidden" name="refresh" value="true">
-  <input type="submit" value="refresh"> <i>Try this if facing any bugs, such as the page going blank</i>
+  <input type="submit" value="refresh">
+  <i>
+    Try this if facing any bugs, such as the page going blank
+  </i>
+</form>
+
+<form action="/">
+  <input type="number" name="delay_screenshot">
+  <input type="submit" value="delay screenshot">
+  <i> Wait n additional seconds before taking screenshots.
+    It will take longer to respond to commands, but the screenshots will be more accurate. Recommended value: 2
+  </i>
+</form>
+
+<form action="/">
+  <input type="hidden" name="reenable_on_click_script" value="true">
+  <input type="submit" value="re-enable sending on-click script repeatedly">
+  <i>
+    It is the default behavior to send the on-click listener (which enables typing text) every time a click
+    event occurs.Since websites can clear their DOM event listeners at will, sending the on-click script repeatedly
+    ensures that the listeners are active. On certain sites, though, it needs to be send once-and-only-once, and will
+    automatically disable re-sending if there is an error. If this happens and then  a completely different website is
+    then requested, the on-click listeners will not send and there will be no way to enter text. If this situation occurs
+    , click this button.
+  </i>
 </form>
 
 <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
