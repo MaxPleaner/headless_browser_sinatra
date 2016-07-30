@@ -4,7 +4,6 @@ require_relative("./driver_helpers.rb")
 # headless Firefox browser running using selenium
 class HeadlessBrowser
   
-  
   # provides a headless_env that can be passed to initialize
   def self.start_headless
     headless = Headless.new
@@ -44,7 +43,6 @@ class HeadlessBrowser
     given_params[:refresh]                  = params[:refresh]
     given_params[:delay_screenshot]         = params[:delay_screenshot]
     given_params[:reenable_on_click_script] = params[:reenable_on_click_script]
-    should_take_screenshot                  = false
     should_take_screenshot_results = given_params.map do |name, val|
       val && send_param(name, val)
     end

@@ -3,21 +3,30 @@
 <head>
 <title> headless_browser_sinatra </title>
 <style>
+
+  /* Body and HTML cover the entire page */
   body, html {
     height: 100%; width: 100%;
   }
+
+  /* Navbar at the top */
   .navbar {
     width: 90%;
     border: 1px solid black; padding: 5px;
   }
+  
+  /* An individual link in the navbar */
   .navbar-item {
     border: 1px solid black; padding: 5px;
     display: inline-block;
   }
+  
+  /* Styling for the screenshot img */
   #page-screenshot {
     border: 1px solid black;
     margin: 10px;
   }
+  
 </style>
 <script src="jquery.js"></script>
 </head>
@@ -37,12 +46,21 @@
 <%= yield %>
 
 <script>
+
+  `When the image is clicked, get the x,y coords of the mouse
+  and send them to the server.
+  The click is mirrored on the headless firefox browser
+  and the screenshot updates to show the result.
+  If an input is clicked, it will be tracked as 'window.lastSelectedElement'
+  and will be considered the target location for text entry`
+  
   $('img').click(function(e) {
     var offset = $(this).offset();
     var x = e.pageX - offset.left;
     var y = e.pageY - offset.top;
     window.location = `http://localhost:4567?click_coords=${x},${y}`
   });
+  
 </script>
 </body>
 </html>

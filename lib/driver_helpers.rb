@@ -12,6 +12,7 @@ class DriverHelpers
                             
     @should_send_click_listeners = true # on click is sent upon every click
                                         # to ensure that the event listeners are defined
+                                        # Some sites dont allow this, which is why it's a togglable boolean
   end
   
   
@@ -20,10 +21,10 @@ class DriverHelpers
     driver.current_url != "about:blank"
   end
   
-  # raise an error unless there's a current page
+  # unless there's a current page, raise an error and delete any remnant screenshot
   def ensure_current_page_exists
     unless driver_has_current_page?
-      # remove the last screenshot as it's not loaded anymore
+      # remove the last screenshot since it's not accurate anymore
       `rm public/screenshot.jpg`
       raise(HeadlessBrowserError, "browser has not visited any websites yet")
     end
@@ -32,14 +33,14 @@ class DriverHelpers
   # Send the browser to a web page
   def navigate(url)
     driver.navigate.to(url)
+    # send jquery to every page unless it already includes it
+    send_jquery_if_undefined
     # on new page load, refresh @scripts_been_sent
-    @scripts_been_sent = {}
-    # send jquery and the on click script to every page
-    send_static_script("./public/jquery.js")
     @scripts_been_sent = { 'jquery' => true }
   end
   
-   # Click an element on the page based on a CSS selector
+  # Click an element on the page based on a CSS selector
+  # No front-end connection yet exists for this
   def click_selector(selector)
     ensure_current_page_exists
     begin
@@ -58,14 +59,12 @@ class DriverHelpers
   def click_coords(x, y)
     ensure_current_page_exists
     # send jquery unless it's already loaded
-    is_jquery_loaded = driver.execute_script("return typeof($)") == 'function'
-    send_static_script("./public/jquery.js") unless is_jquery_loaded
+    send_jquery_if_undefined
     # always try and send the on click script in case the listeners were destroyed
     begin
       driver.execute_script(on_click_script) if @should_send_click_listeners
     rescue Selenium::WebDriver::Error::JavascriptError
-      # don't try and use attr reader / writer in rescue blocks, they won't work. This was painful to debug.
-      @should_send_click_listeners = false
+      self.should_send_click_listeners = false
       refresh_failsafe # Refresh the page using Selenium API. Firefox's JS environment resets.
       raise(HeadlessBrowserError, "Error with on click script. Disabling, please refresh the page and try again")
     end
@@ -119,6 +118,12 @@ class DriverHelpers
     script = File.read(path)
     driver.execute_script(script)
     true
+  end
+  
+  # Sends jQuery unless the page already defines jQuery
+  def send_jquery_if_undefined
+    is_jquery_loaded = driver.execute_script("return typeof($)") == 'function'
+    send_static_script("./public/jquery.js") unless is_jquery_loaded
   end
   
   # Given a CSS selector, find an element on the page and return it as a Selenium::WebDriver::Element

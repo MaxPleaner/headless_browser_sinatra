@@ -25,7 +25,7 @@ class RoutesInit
     end
   end
   
-  # call methods in lib/headless_env to lauch headless & firefox
+  # call methods in lib/headless_browser to lauch headless & firefox
   def self.setup_headless_env
     Routes::HeadlessEnv     ||= HeadlessBrowser.start_headless
     Routes::Driver          ||= HeadlessBrowser.start_driver

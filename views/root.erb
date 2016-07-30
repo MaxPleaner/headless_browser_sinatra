@@ -1,16 +1,21 @@
+<%# show errors if any exist %>
+<%# this is used to pass generic messages as well %>
 <%= @error %>
 
+<%# Form to navigate to a url %>
 <form action="/">
   <input type="text" name="url">
   <input type="submit" value="type website name i.e. gmail or http://gmail.com">
 </form>
 
-
+<%# Form to send text to a selected node %>
+<%# Before doing this, an input should be clicked on the firefox page %>
 <form action="/">
   <input type="text" name="enter_text">
   <input type="submit" value="send text to selected node">
 </form>
 
+<%# Form to refresh the firefox page %>
 <form action="/">
   <input type="hidden" name="refresh" value="true">
   <input type="submit" value="refresh">
@@ -19,6 +24,8 @@
   </i>
 </form>
 
+<%# Form to set the 'delay_screenshot' setting on the server %>
+<%# This will delay taking a screenshot for n seconds to ensure the page has loaded %>
 <form action="/">
   <input type="number" name="delay_screenshot">
   <input type="submit" value="delay screenshot">
@@ -27,6 +34,12 @@
   </i>
 </form>
 
+<%# Form to turn on sending of the on-click script %>
+<%# The on-click script will be automatically turned off it it fails %>
+<%# If it is turned off, it should remain off while the current page is loaded %>
+<%# Text entry should continue to work %>
+<%# If a different page is then requested, text entry will not work %>
+<%# This form should be submitted to fix the issue %>
 <form action="/">
   <input type="hidden" name="reenable_on_click_script" value="true">
   <input type="submit" value="re-enable sending on-click script repeatedly">
@@ -40,4 +53,5 @@
   </i>
 </form>
 
+<%# The current screenshot of the active Firefox page %>
 <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
