@@ -11,4 +11,6 @@ require 'headless'             # (gem) headless x environment
 require 'sinatra'              # (gem) web server / routes
 require 'selenium-webdriver'   # (gem) firefox command runner
 require 'timeout'              # (stdlib) stop long-running commands
-
+require 'active_support/all'   # ruby language utils
+require 'pstore'
+require 'awesome_print'

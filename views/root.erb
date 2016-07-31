@@ -4,13 +4,16 @@
   <%= @error %>
 </div>
 
+<%= @macros %>
+
 <div id="forms-container">
   
   <div id="refresh-form">
     <%# Form to refresh the firefox page %>
     <form action="/">
       <input type="hidden" name="refresh" value="true">
-      <input type="submit" value="refresh">
+      <input type="submit" value="refresh"><br>
+      <small><i>runs <code>location.reload</code><br>on the selenium browser</i></small>
     </form>
   </div>
   
@@ -18,7 +21,8 @@
     <%# Form to navigate to a url %>
     <form action="/">
       <input type="submit" value="go to url"><br>
-      <input type="text" name="url" placeholder="url goes here">
+      <input type="text" name="url" placeholder="url goes here"><br>
+      <small><i>i.e. <code>Google</code> or<br><code>http://google.com</code></i></small>
     </form>
   </div>
   
@@ -27,7 +31,8 @@
     <%# Before doing this, an input should be clicked on the firefox page %>
     <form action="/">
       <input type="submit" value="send text"> <br>
-      <input type="text" name="enter_text" placeholder="text goes here">
+      <input type="text" name="enter_text" placeholder="text goes here"><br>
+      <small><i>Click an input<br>on the page first</i></small>
     </form>
   </div>
   
@@ -36,7 +41,8 @@
     <%# This will delay taking a screenshot for n seconds to ensure the page has loaded %>
     <form action="/">
       <input type="submit" value="delay screenshot"><br>
-      <input type="number" name="delay_screenshot" placeholder="number of seconds">
+      <input type="number" name="delay_screenshot" placeholder="number of seconds"><br>
+      <small><i>longer load time,<br>but more accurate UI</i></small>
     </form>
   </div>
 

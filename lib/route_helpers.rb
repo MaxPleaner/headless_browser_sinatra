@@ -7,6 +7,11 @@
 
 module RouteHelpers
   
+  # saves params to the Macros object
+  def add_to_current_macro(params_obj)
+    self.class::CurrentMacro.push(params_obj)
+  end
+  
   # returns [screenshot_path, error_message]
   def run_commands_and_handle_errors(params, most_recent_screenshot)
     rescue_headless_browser_errors_and_messages do

@@ -39,7 +39,8 @@ a:visited, a {
 
 /* Errors and messages */
 #errors {
-  
+  margin-left: 20px;
+  /*border: 1px solid white;*/
 }
 
 /* Container for forms */
