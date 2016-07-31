@@ -38,14 +38,28 @@ module MacroRunner
   end
   
   # Runs command and sets up instance variables for the root view
+  # if it is a nested macro, expand it into individual commands, shift
+  # them to the front of the RunningCommand[:cmd] list, and run the first.
   def run_macro_command(macro_name, current_command)
     setup_headless_env
+    if current_command.has_key?(:macro)
+      expand_macro_into_running_command(current_command)
+      current_command = Routes::RunningCommand[:cmd].shift
+    end
     @screenshot, @error = run_commands_and_handle_errors(
       current_command,
       'screenshot.jpg'
     )
     @running_macro_name = macro_name
     @running_macro_current_command = current_command
+    return self
+  end
+  
+  def expand_macro_into_running_command(current_command)
+    macro_name = current_command[:macro]
+    macro_content = []
+    db.transaction { macro_content = db[macro_name] }
+    macro_content.each { |cmd| Routes::RunningCommand[:cmd].unshift(cmd) }
     return self
   end
   

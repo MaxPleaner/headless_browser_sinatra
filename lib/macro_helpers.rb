@@ -169,6 +169,7 @@ module MacroHelpers
     found_macro = []
     db.transaction { found_macro = YAML.load(db[name]) }
     if found_macro
+      add_macro_to_current_macro(name) if self.class::Macro[:status]
       return start_running_macro(name, found_macro) # defined in macro_runner
     else
       @screenshot, @error = default_screenshot(
@@ -176,6 +177,11 @@ module MacroHelpers
       )
       return erb(:root)
     end
+  end
+  
+  # macro nesting
+  def add_macro_to_current_macro(name)
+    self.class::CurrentMacro.push({'macro' => name})
   end
   
   def continue_macro_run

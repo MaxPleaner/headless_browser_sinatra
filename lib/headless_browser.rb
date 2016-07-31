@@ -121,6 +121,9 @@ class HeadlessBrowser
     when :reenable_on_click_script
       @driver_helpers.should_send_click_listeners = true
       false
+    when :custom_script
+      @driver_helpers.driver.execute_script(val)
+      true
     end
   end
 
