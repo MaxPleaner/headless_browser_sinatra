@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module MacroHelpers - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-included">::included</a>
+    
+    <li ><a href="#method-i-all_macros">#all_macros</a>
+    
+    <li ><a href="#method-i-db">#db</a>
+    
+    <li ><a href="#method-i-save_current_macro">#save_current_macro</a>
+    
+    <li ><a href="#method-i-turn_macro_recording_off">#turn_macro_recording_off</a>
+    
+    <li ><a href="#method-i-turn_macro_recording_on">#turn_macro_recording_on</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-MacroHelpers">
+  <h1 id="module-MacroHelpers" class="module">
+    module MacroHelpers
+  </h1>
+
+  <section class="description">
+    <ul><li>
+<p>The <a href="MacroHelpers.html">MacroHelpers</a> class is used by
+lib/sinatra_routes.rb</p>
+</li><li>
+<p>It defines two constants on the <a href="Routes.html">Routes</a> class:
+“Macro” and “CurrentMacro”</p>
+</li><li>
+<p>It also defines the content for a few routes in its own “MacroRoutes”
+constant</p>
+</li></ul>
+
+<h1 id="module-MacroHelpers-label-The+macros+feature+is+intended+to+record+command+sequences-2C+save+them-2C+and+replay+them.">The macros feature is intended to record command sequences, save them, and replay them.<span><a href="#module-MacroHelpers-label-The+macros+feature+is+intended+to+record+command+sequences-2C+save+them-2C+and+replay+them.">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-included" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">included</span><span
+            class="method-args">(base)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="included-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
+  
+  <span class="ruby-comment"># Persistent storage</span>
+  <span class="ruby-identifier">base</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-string">&quot;Database&quot;</span>, <span class="ruby-constant">PStore</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;./database.pstore&quot;</span>))
+
+  <span class="ruby-comment"># Tracks if a macro is currently being recorded or not</span>
+  <span class="ruby-identifier">base</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-string">&quot;Macro&quot;</span>, { <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span> })
+
+  <span class="ruby-comment"># Track the current macro before it is saved</span>
+  <span class="ruby-identifier">base</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-string">&quot;CurrentMacro&quot;</span>, [])
+
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-all_macros" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">all_macros</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="all_macros-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 72</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">all_macros</span>
+  <span class="ruby-identifier">results</span> = {}
+  <span class="ruby-comment"># db.roots is like Hash#keys</span>
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>.<span class="ruby-identifier">roots</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">results</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">k</span>]) } }
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">results</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-db" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">db</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="db-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">db</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Database</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-save_current_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">save_current_macro</span><span
+            class="method-args">(given_params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="save_current_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_current_macro</span>(<span class="ruby-identifier">given_params</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">given_params</span>[<span class="ruby-value">:name</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot; &quot;</span>, <span class="ruby-string">&quot;-&quot;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Macro name can&#39;t be empty&quot;</span>
+    <span class="ruby-identifier">failure</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Current macro has no content&quot;</span>
+    <span class="ruby-identifier">failure</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Can&#39;t save macro while recording&quot;</span>
+    <span class="ruby-identifier">failure</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">to_json</span> }
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-turn_macro_recording_off" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">turn_macro_recording_off</span><span
+            class="method-args">(given_params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="turn_macro_recording_off-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">turn_macro_recording_off</span>(<span class="ruby-identifier">given_params</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>] = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Turned macro recording off&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Cant turn macro recording off, it is not on&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-turn_macro_recording_on" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">turn_macro_recording_on</span><span
+            class="method-args">(given_params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>content for /macro_on route</p>
+          
+          
+
+          
+          <div class="method-source-code" id="turn_macro_recording_on-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">turn_macro_recording_on</span>(<span class="ruby-identifier">given_params</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Cant turn macro on, it is already on&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>] = <span class="ruby-string">&quot;on&quot;</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Turned macro recording on&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

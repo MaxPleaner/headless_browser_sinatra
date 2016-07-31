@@ -1,4 +1,4 @@
-F/* Body and HTML */
+/* Body and HTML */
 body, html {
   height: 100%; width: 100%;
   background-color: black;
@@ -38,8 +38,13 @@ a:visited, a {
 }
 
 /* Errors and messages */
-#errors {
+#errors, #message {
   margin-left: 20px;
+  margin-bottom: 20px;
+  background-color: rgba(123, 123, 123, .5);
+  display: inline-block;
+  padding: 15px;
+  
   /*border: 1px solid white;*/
 }
 
@@ -89,3 +94,39 @@ a:visited, a {
   
 }
 
+/* index page's on/off/save buttons for macro recording */
+ #macro-controls {
+   margin-left: 40px;
+ }
+ 
+ /* index page's list of macros */
+ #macros-list {
+   margin-left: 30px;
+   display: inline-block;
+   padding: 10px 10px 10px;
+ }
+ 
+ .macros-list-item {
+   border: 1px dotted darkgrey;
+   padding: 5px;
+ }
+
+
+#edit-macro-page {
+  margin-left: 30px;
+}
+.pull-right {
+  float: right;
+  padding-left: 20px;
+}
+
+#macro-content {
+  width: 200px;
+  height: 150px;
+}
+
+#macro-name {
+  margin-left: 20px;
+  font-size: 25px;
+  text-decoration: italic;
+}

@@ -14,3 +14,4 @@ require 'timeout'              # (stdlib) stop long-running commands
 require 'active_support/all'   # ruby language utils
 require 'pstore'
 require 'awesome_print'
+require 'yaml'

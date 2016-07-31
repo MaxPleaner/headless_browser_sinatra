@@ -1,0 +1,13 @@
+<h4> Running macro: <%= @running_macro_name %> </h4>
+<h5> Current command: <%= @running_macro_current_command %> </h5>
+<hr>
+
+<script>
+$(function(){
+  var pauseBetweenCommandsInterval = 5000 // 5 seconds
+  function runNextCommand() {
+    window.location.href = "http://localhost:4567/continue_macro_run"
+  }
+  window.setInterval(runNextCommand, pauseBetweenCommandsInterval)
+})
+</script>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class HeadlessBrowser - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">Object
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-default_screenshot_delay">::default_screenshot_delay</a>
+    
+    <li ><a href="#method-c-headless_with_customization">::headless_with_customization</a>
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-c-set_firefox_binary_path-21">::set_firefox_binary_path!</a>
+    
+    <li ><a href="#method-c-start_driver">::start_driver</a>
+    
+    <li ><a href="#method-c-start_headless">::start_headless</a>
+    
+    <li ><a href="#method-i-make_hash_keys_symbols">#make_hash_keys_symbols</a>
+    
+    <li ><a href="#method-i-make_url">#make_url</a>
+    
+    <li ><a href="#method-i-process_params">#process_params</a>
+    
+    <li ><a href="#method-i-screenshot">#screenshot</a>
+    
+    <li ><a href="#method-i-send_param">#send_param</a>
+    
+    <li ><a href="#method-i-transform_params">#transform_params</a>
+    
+    <li ><a href="#method-i-url_is_really_url-3F">#url_is_really_url?</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-HeadlessBrowser">
+  <h1 id="class-HeadlessBrowser" class="class">
+    class HeadlessBrowser
+  </h1>
+
+  <section class="description">
+    
+<p>Define a class which loads a headless Firefox browser using selenium</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-driver" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">driver</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-driver_helpers" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">driver_helpers</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-headless_env" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">headless_env</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-screenshot_delay" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">screenshot_delay</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-default_screenshot_delay" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default_screenshot_delay</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set the default number of seconds to delay taking a screenshot</p>
+          
+          
+
+          
+          <div class="method-source-code" id="default_screenshot_delay-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">default_screenshot_delay</span>
+  <span class="ruby-comment"># Adding a few seconds delay ensures the headless browser</span>
+  <span class="ruby-comment"># has completed any UI changes</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-value">2</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-headless_with_customization" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">headless_with_customization</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="headless_with_customization-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">headless_with_customization</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-constant">Headless</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-comment"># this can be customized with more options</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(headless_env, driver)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p><a href="HeadlessBrowser.html">HeadlessBrowser</a> initializer</p>
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 63</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">headless_env</span>, <span class="ruby-identifier">driver</span>)
+  <span class="ruby-ivar">@headless_env</span>     = <span class="ruby-identifier">headless_env</span>
+  <span class="ruby-ivar">@driver</span>           = <span class="ruby-identifier">driver</span>
+  <span class="ruby-ivar">@driver_helpers</span>   = <span class="ruby-constant">DriverHelpers</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@driver</span>)
+  <span class="ruby-ivar">@screenshot_delay</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">default_screenshot_delay</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-set_firefox_binary_path-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_firefox_binary_path!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>lib/firefox is a symlink to firefox-sdk/bin/firefox</p>
+          
+          
+
+          
+          <div class="method-source-code" id="set_firefox_binary_path-21-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">set_firefox_binary_path!</span>
+  <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Firefox</span><span class="ruby-operator">::</span><span class="ruby-constant">Binary</span>.<span class="ruby-identifier">path</span> = <span class="ruby-string">&quot;./lib/firefox&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-start_driver" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">start_driver</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Create a firefox driver that can be passed to <a
+href="HeadlessBrowser.html#method-c-new">::new</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="start_driver-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">start_driver</span>
+  <span class="ruby-identifier">set_firefox_binary_path!</span>
+  <span class="ruby-identifier">driver</span> = <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span>.<span class="ruby-identifier">for</span>(<span class="ruby-value">:firefox</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">driver</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-start_headless" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">start_headless</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Create a headless environment that can be passed to <a
+href="HeadlessBrowser.html#method-c-new">::new</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="start_headless-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">start_headless</span>
+  <span class="ruby-identifier">headless</span> = <span class="ruby-identifier">headless_with_customization</span>
+  <span class="ruby-identifier">headless</span>.<span class="ruby-identifier">start</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">headless</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-make_hash_keys_symbols" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">make_hash_keys_symbols</span><span
+            class="method-args">(hash)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="make_hash_keys_symbols-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_hash_keys_symbols</span>(<span class="ruby-identifier">hash</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">reduce</span>({}) { <span class="ruby-operator">|</span><span class="ruby-identifier">memo</span>,(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)<span class="ruby-operator">|</span> <span class="ruby-identifier">memo</span>.<span class="ruby-identifier">tap</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">v</span> } }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-make_url" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">make_url</span><span
+            class="method-args">(txt)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Turns “gmail” into “<a href="http://gmail.com">gmail.com</a>”, for example</p>
+          
+          
+
+          
+          <div class="method-source-code" id="make_url-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 148</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_url</span>(<span class="ruby-identifier">txt</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-node">&quot;http://#{txt}.com&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-process_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_params</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Interpret parameters from routes and run commands accordingly returns a
+boolean indicating whether a screenshot should be taken or not</p>
+          
+          
+
+          
+          <div class="method-source-code" id="process_params-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_params</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-comment"># delete remnant screenshot if no page is loaded</span>
+  <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">ensure_current_page_exists</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">given_params</span> = <span class="ruby-identifier">transform_params</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-comment"># execute each of the commands and track whether the command calls for a screenshot</span>
+  <span class="ruby-identifier">should_take_screenshot_results</span> = <span class="ruby-identifier">given_params</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">val</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">send_param</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">val</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">should_take_screenshot_results</span>.<span class="ruby-identifier">any?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-screenshot" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">screenshot</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>saves a screenshot to “public/screenshot.jog”</p>
+          
+          
+
+          
+          <div class="method-source-code" id="screenshot-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 129</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">screenshot</span>
+  <span class="ruby-comment"># the path sent to clients</span>
+  <span class="ruby-identifier">client_screenshot_path</span> = <span class="ruby-string">&quot;screenshot.jpg&quot;</span>
+  <span class="ruby-comment"># true location</span>
+  <span class="ruby-identifier">screenshot_path</span> = <span class="ruby-node">&quot;#{`pwd`.chomp}/public/#{client_screenshot_path}&quot;</span>
+  <span class="ruby-node">%x`rm #{screenshot_path}`</span>
+  <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@screenshot_delay</span>
+  <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">save_screenshot</span>(<span class="ruby-identifier">screenshot_path</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">client_screenshot_path</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-send_param" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">send_param</span><span
+            class="method-args">(name, val)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Run the command indicated by a particular param Returns a bool indicating
+whether the command calls for a screenshot</p>
+          
+          
+
+          
+          <div class="method-source-code" id="send_param-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">send_param</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">val</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">case</span> <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:coords</span>
+    <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">click_coords</span>(<span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>])
+    <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:url</span>
+    <span class="ruby-identifier">val</span> = <span class="ruby-identifier">url_is_really_url?</span>(<span class="ruby-identifier">val</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">val</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">make_url</span>(<span class="ruby-identifier">val</span>)
+    <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">navigate</span>(<span class="ruby-identifier">val</span>)
+    <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:enter_text</span>
+    <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">enter_text</span>(<span class="ruby-identifier">val</span>)
+    <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:refresh</span>
+    <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">refresh</span>
+    <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:delay_screenshot</span>
+    <span class="ruby-ivar">@screenshot_delay</span> = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:reenable_on_click_script</span>
+    <span class="ruby-ivar">@driver_helpers</span>.<span class="ruby-identifier">should_send_click_listeners</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-transform_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">transform_params</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>transform the params object</p>
+          
+          
+
+          
+          <div class="method-source-code" id="transform_params-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 90</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">transform_params</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">make_hash_keys_symbols</span>(
+    <span class="ruby-identifier">params_obj</span>.<span class="ruby-identifier">merge</span>(
+      <span class="ruby-identifier">coords</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:click_coords</span>]<span class="ruby-operator">&amp;</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;,&quot;</span>)
+    )
+  )
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-url_is_really_url-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">url_is_really_url?</span><span
+            class="method-args">(url)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>A pretty lenient check to see if a url is valid</p>
+          
+          
+
+          
+          <div class="method-source-code" id="url_is_really_url-3F-source">
+            <pre><span class="ruby-comment"># File lib/headless_browser.rb, line 141</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">url_is_really_url?</span>(<span class="ruby-identifier">url</span>)
+  <span class="ruby-keyword">return</span> [<span class="ruby-string">&quot;http&quot;</span>, <span class="ruby-string">&quot;www.&quot;</span>, <span class="ruby-string">&quot;.com&quot;</span>, <span class="ruby-string">&quot;.net&quot;</span>, <span class="ruby-string">&quot;.org&quot;</span>, <span class="ruby-string">&quot;.edu&quot;</span>].<span class="ruby-identifier">any?</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">url</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

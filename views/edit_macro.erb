@@ -1,0 +1,21 @@
+<% name = @macro_name %>
+<% content = @failed_macro_edit || @macro_content %>
+
+<div id="edit-macro-page">
+  <br><small><a href="/macro_delete?name=<%= name %>">delete</a></small><br>
+  
+  <% if @message && @message.length != 0 %>
+    <br><div id="message"><%= @message %></div>
+  <% end %>
+  
+  <div id="edit-macro">
+    Edit Macro: <span id="macro-name"><%= name %></span> <br><br>
+    <form action="macro_update">
+      <input type="hidden" name="name" value="<%= name %>">
+      <textarea name='content' id="macro-content"><%= content %></textarea><br><br>
+      <input type="submit" value="update macro">
+    </form>
+  </div>
+</div>
+
+

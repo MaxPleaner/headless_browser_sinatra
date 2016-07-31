@@ -7,17 +7,12 @@
 
 module RouteHelpers
   
-  # saves params to the Macros object
-  def add_to_current_macro(params_obj)
-    self.class::CurrentMacro.push(params_obj)
-  end
-  
   # returns [screenshot_path, error_message]
-  def run_commands_and_handle_errors(params, most_recent_screenshot)
+  def run_commands_and_handle_errors(params_obj, most_recent_screenshot)
     rescue_headless_browser_errors_and_messages do
       rescue_selenium_javascript_errors do
         screenshot_path = execute_commands_and_return_screenshot(
-          params,
+          params_obj,
           most_recent_screenshot
          )
          error_message = nil
@@ -53,9 +48,9 @@ module RouteHelpers
   end
 
   # execute commands on the headless browser by interpreting the params
-  def execute_commands_and_return_screenshot(params, most_recent_screenshot)
+  def execute_commands_and_return_screenshot(params_obj, most_recent_screenshot)
     # generate a new screenshot or don't, depending on the commands being run
-    should_send_screenshot = self.class::Browser.process_params(params)
+    should_send_screenshot = self.class::Browser.process_params(params_obj)
     if should_send_screenshot
       self.class::Browser.driver_helpers.sync_scripts
       return self.class::Browser.screenshot

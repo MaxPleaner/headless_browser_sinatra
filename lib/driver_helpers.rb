@@ -172,7 +172,8 @@ class DriverHelpers
   # Sends jquery autotype unless the page already defines $.fn.autotype
   def send_jquery_autotype_if_undefined
     is_script_loaded = driver.execute_script(
-      "return typeof($.fn.autotype)"
+      "if ((!$) || !($.fn)) { return false } \
+      else { return typeof($.fn.autotype) }"
     ).eql?('function')
     send_static_script("./public/jquery.autotype.js") unless is_script_loaded
     return self
@@ -181,7 +182,8 @@ class DriverHelpers
   # This jquery plugin assists in setting styles with the !important tag
   def send_jquery_style_if_undefined
     is_script_loaded = driver.execute_script(
-      "return typeof($.fn.style)"
+      "if ((!$) || !($.fn)) { return false } \
+       else { return typeof($.fn.style) }"
     ).eql?('function')
     send_static_script("./public/jquery.style.js") unless is_script_loaded
     return self

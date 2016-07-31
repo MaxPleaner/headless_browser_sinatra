@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>jquery.autotype.js - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../Gemfile.html">Gemfile</a>
+  
+    <li><a href="../Gemfile_lock.html">Gemfile.lock</a>
+  
+    <li><a href="../README_md.html">README</a>
+  
+    <li><a href="../install_sh.html">install.sh</a>
+  
+    <li><a href="../public/jquery_autotype_js.html">jquery.autotype.js</a>
+  
+    <li><a href="../public/jquery_js.html">jquery.js</a>
+  
+    <li><a href="../public/jquery_style_js.html">jquery.style.js</a>
+  
+    <li><a href="../public/style_css.html">style.css</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page public/jquery.autotype.js">
+
+<pre>jQuery.autotype - Simple, accurate, typing simulation for jQuery
+
+version 0.5.0
+
+http://michaelmonteleone.net/projects/autotype
+http://github.com/mmonteleone/jquery.autotype
+
+Copyright (c) 2009 Michael Monteleone
+Licensed under terms of the MIT License (README.markdown)</pre>
+
+<p>(function($){</p>
+
+<pre>// code type constants
+var CHARACTER = 1,
+    NON_CHARACTER = 2,
+    MODIFIER_BEGIN = 3,
+    MODIFIER_END = 4,
+    isNullOrEmpty = function(val) { return val === null || val.length === 0; },
+    isUpper = function(char) { return char.toUpperCase() === char; },
+    isLower = function(char) { return char.toLowerCase() === char; },
+    areDifferentlyCased = function(char1,char2) {
+            return (isUpper(char1) &amp;&amp; isLower(char2)) ||
+                (isLower(char1) &amp;&amp; isUpper(char2));
+        },
+    convertCase = function(char) {
+            return isUpper(char) ? char.toLowerCase() : char.toUpperCase();
+        },
+    parseCodes = function(value, codeMap) {
+            // buffer to hold a collection of key/char code pairs corresponding to input string value
+        var codes = [],
+            // buffer to hold the name of a control key as it&#39;s being parsed
+            definingControlKey = false,
+            // hold a collection of currently pushed modifier keys
+            activeModifiers = {
+                alt: false,
+                meta: false,
+                shift: false,
+                ctrl: false
+            },
+            explicitModifiers = $.extend({}, activeModifiers),
+            // buffer to hold construction of current control key
+            currentControlKey = &#39;&#39;,
+            previousChar = &#39;&#39;,
+            pushCode = function(opts) {
+                codes.push($.extend({}, opts, activeModifiers));
+            },
+            pushModifierBeginCode = function(modifierName) {
+                activeModifiers[modifierName] = true;
+                pushCode({
+                    keyCode: codeMap[modifierName],
+                    charCode: 0,
+                    char: &#39;&#39;,
+                    type: MODIFIER_BEGIN
+                });
+            },
+            pushModifierEndCode = function(modifierName) {
+                activeModifiers[modifierName] = false;
+                pushCode({
+                    keyCode: codeMap[modifierName],
+                    charCode: 0,
+                    char: &#39;&#39;,
+                    type: MODIFIER_END
+                });
+            };
+
+        for(var i=0;i&lt;value.length;i++) {
+            // if the character is about to define a control key
+            if(!definingControlKey &amp;&amp;
+                i &lt;= value.length - 5 &amp;&amp;
+                value.charAt(i) === &#39;{&#39; &amp;&amp;
+                value.charAt(i+1) === &#39;{&#39;)
+            {
+                // skip the next &quot;{&quot;
+                i++;
+
+                definingControlKey = true;
+            }
+            // if the character is about to end definition of control key
+            else if (definingControlKey &amp;&amp;
+                i &lt;= value.length - 2 &amp;&amp;
+                value.charAt(i) === &#39;}&#39; &amp;&amp;
+                value.charAt(i+1) === &#39;}&#39;)
+            {
+                // skip the next &quot;}&quot;
+                i++;
+
+                // check if this key is a modifier-opener (is a ctrl,alt,del,shift)
+                if(activeModifiers[currentControlKey] !== undefined)
+                {
+                    explicitModifiers[currentControlKey] = true;
+                    pushModifierBeginCode(currentControlKey);
+                }
+                // check if this key is a modifier-closer (is a /ctrl,/alt,/del,.shift)
+                else if(activeModifiers[currentControlKey.substring(1)] !== undefined)
+                {
+                    explicitModifiers[currentControlKey] = false;
+                    pushModifierEndCode(currentControlKey.substring(1));
+                }
+                // otherwise is some other kind of non-modifier control key
+                else
+                {
+                    pushCode({
+                        keyCode: codeMap[currentControlKey],
+                        charCode: 0,
+                        char: &#39;&#39;,
+                        type: NON_CHARACTER,
+                        controlKeyName: currentControlKey
+                    });
+                }
+
+                definingControlKey = false;
+                currentControlKey = &#39;&#39;;
+            }
+            // currently defining control key
+            else if (definingControlKey)
+            {
+                currentControlKey += value.charAt(i);
+            }
+            // otherwise is just a text character
+            else
+            {
+                var character = value.charAt(i);
+
+                // check for any implicitly changing of cases, and register presses/releases
+                // of the shift key in accord with them.
+                if(
+                    (!isNullOrEmpty(previousChar) &amp;&amp; areDifferentlyCased(previousChar, character)) ||
+                    (isNullOrEmpty(previousChar) &amp;&amp; isUpper(character))
+                  )
+                {
+                    if(isUpper(character) &amp;&amp; !activeModifiers.shift) {
+                        pushModifierBeginCode(&quot;shift&quot;);
+                    } else if (isLower(character) &amp;&amp; activeModifiers.shift &amp;&amp; !explicitModifiers.shift){
+                        pushModifierEndCode(&quot;shift&quot;);
+                    }
+                }
+
+                // modify the current character if there are active modifiers
+                if((activeModifiers.shift &amp;&amp; isLower(character)) ||
+                    (!activeModifiers.shift &amp;&amp; isUpper(character))) {
+                    // shift converts case
+                    character = convertCase(character);
+                }
+
+                var code = {
+                    // if can&#39;t identify a keycode, just fudge with the char code.
+                    // nope, this isn&#39;t ideal by any means.
+                    keyCode: codeMap[character] || character.charCodeAt(0),
+                    charCode: character.charCodeAt(0),
+                    char: character,
+                    type: CHARACTER
+                };
+
+                // modify the current character if there are active modifiers
+                if(activeModifiers.alt ||
+                    activeModifiers.ctrl ||
+                    activeModifiers.meta) {
+                    // alt, ctrl, meta make it so nothing is typed
+                    code.char = &#39;&#39;;
+                }
+                pushCode(code);
+                if(code.char !== &#39;&#39;) { previousChar = code.char; }
+            }
+        }
+        return codes;
+    },
+    triggerCodeOnField = function(code, field) {
+        // build up base content that every event should contain
+        // with information about whether certain chord keys are
+        // simulated as being pressed
+        var evnt = {
+            altKey: code.alt,
+            metaKey: code.meta,
+            shiftKey: code.shift,
+            ctrlKey: code.ctrl
+        };
+
+        // build out 3 event instances for all the steps of a key entry
+        var keyDownEvent = $.extend($.Event(), evnt, {type:&#39;keydown&#39;, keyCode: code.keyCode, charCode: 0, which: code.keyCode});
+        var keyPressEvent = $.extend($.Event(), evnt, {type:&#39;keypress&#39;, keyCode: 0, charCode: code.charCode, which: code.charCode || code.keyCode});
+        var keyUpEvent = $.extend($.Event(), evnt, {type:&#39;keyup&#39;, keyCode: code.keyCode, charCode: 0, which: code.keyCode});
+
+        // go ahead and trigger the first 2 (down and press)
+        // a keyup of a modifier shouldn&#39;t also re-trigger a keydown
+        if(code.type !== MODIFIER_END) {
+            field.trigger(keyDownEvent);
+        }
+
+        // modifier keys don&#39;t have a keypress event, only down or up
+        if(code.type !== MODIFIER_BEGIN &amp;&amp; code.type !== MODIFIER_END) {
+            field.trigger(keyPressEvent);
+        }
+
+        // only actually add the new character to the input if the keydown or keypress events
+        // weren&#39;t cancelled by any consuming event handlers
+        if(!keyDownEvent.isPropagationStopped() &amp;&amp;
+            !keyPressEvent.isPropagationStopped()) {
+            if(code.type === NON_CHARACTER) {
+                switch(code.controlKeyName) {
+                    case &#39;enter&#39;:
+                        field.val(field.val() + &quot;\n&quot;);
+                        break;
+                    case &#39;back&#39;:
+                        field.val(field.val().substring(0,field.val().length-1));
+                        break;
+                }
+            } else {
+                field.val(field.val() + code.char);
+            }
+        }
+
+        // then also trigger the 3rd event (up)
+        // a keydown of a modifier shouldn&#39;t also trigger a keyup until coded
+        if(code.type !== MODIFIER_BEGIN) {
+            field.trigger(keyUpEvent);
+        }
+    },
+    triggerCodesOnField = function(codes, field, delay, global) {
+        if(delay &gt; 0) {
+            codes = codes.reverse();
+            var keyInterval = global.setInterval(function(){
+                var code = codes.pop();
+                triggerCodeOnField(code, field);
+                if(codes.length === 0) {
+                    global.clearInterval(keyInterval);
+                    field.trigger(&#39;autotyped&#39;);
+                }
+            }, delay);
+        } else {
+            $.each(codes,function(){
+                triggerCodeOnField(this, field);
+            });
+            field.trigger(&#39;autotyped&#39;);
+        }
+    };
+
+$.fn.autotype = function(value, options) {
+    if(value === undefined || value === null) { throw(&quot;Value is required by jQuery.autotype plugin&quot;); }
+    var settings = $.extend({}, $.fn.autotype.defaults, options);
+
+    // 1st Pass
+    // step through the input string and convert it into
+    // a logical sequence of steps, key, and charcodes to apply to the inputs
+    var codes = parseCodes(value, settings.keyCodes[settings.keyBoard]);
+
+    // 2nd Pass
+    // Run the translated codes against each input through a realistic
+    // and cancelable series of key down/press/up events
+    return this.each(function(){ triggerCodesOnField(codes, $(this), settings.delay, settings.global); });
+};
+
+$.fn.autotype.defaults = {
+    version: &#39;0.5.0&#39;,
+    keyBoard: &#39;enUs&#39;,
+    delay: 0,
+    global: window,
+    keyCodes: {
+        enUs: { &#39;back&#39;:8,&#39;ins&#39;:45,&#39;del&#39;:46,&#39;enter&#39;:13,&#39;shift&#39;:16,&#39;ctrl&#39;:17,&#39;meta&#39;:224,
+            &#39;alt&#39;:18,&#39;pause&#39;:19,&#39;caps&#39;:20,&#39;esc&#39;:27,&#39;pgup&#39;:33,&#39;pgdn&#39;:34,
+            &#39;end&#39;:35,&#39;home&#39;:36,&#39;left&#39;:37,&#39;up&#39;:38,&#39;right&#39;:39,&#39;down&#39;:40,
+            &#39;printscr&#39;:44,&#39;num0&#39;:96,&#39;num1&#39;:97,&#39;num2&#39;:98,&#39;num3&#39;:99,&#39;num4&#39;:100,
+            &#39;num5&#39;:101,&#39;num6&#39;:102,&#39;num7&#39;:103,&#39;num8&#39;:104,&#39;num9&#39;:105,
+            &#39;multiply&#39;:106,&#39;add&#39;:107,&#39;subtract&#39;:109,&#39;decimal&#39;:110,
+            &#39;divide&#39;:111,&#39;f1&#39;:112,&#39;f2&#39;:113,&#39;f3&#39;:114,&#39;f4&#39;:115,&#39;f5&#39;:116,
+            &#39;f6&#39;:117,&#39;f7&#39;:118,&#39;f8&#39;:119,&#39;f9&#39;:120,&#39;f10&#39;:121,&#39;f11&#39;:122,
+            &#39;f12&#39;:123,&#39;numlock&#39;:144,&#39;scrolllock&#39;:145,&#39;   &#39;:9,&#39; &#39;:32,
+            &#39;tab&#39;:9,&#39;space&#39;:32,&#39;0&#39;:48,&#39;1&#39;:49,&#39;2&#39;:50,&#39;3&#39;:51,&#39;4&#39;:52,
+            &#39;5&#39;:53,&#39;6&#39;:54,&#39;7&#39;:55,&#39;8&#39;:56,&#39;9&#39;:57,&#39;)&#39;:48,&#39;!&#39;:49,&#39;@&#39;:50,
+            &#39;#&#39;:51,&#39;$&#39;:52,&#39;%&#39;:53,&#39;^&#39;:54,&#39;&amp;&#39;:55,&#39;*&#39;:56,&#39;(&#39;:57,&#39;;&#39;:186,
+            &#39;=&#39;:187,&#39;,&#39;:188,&#39;-&#39;:189,&#39;.&#39;:190,&#39;/&#39;:191,&#39;[&#39;:219,&#39;\\&#39;:220,
+            &#39;]&#39;:221,&quot;&#39;&quot;:222,&#39;:&#39;:186,&#39;+&#39;:187,&#39;&lt;&#39;:188,&#39;_&#39;:189,&#39;&gt;&#39;:190,
+            &#39;?&#39;:191,&#39;{&#39;:219,&#39;|&#39;:220,&#39;}&#39;:221,&#39;&quot;&#39;:222,&#39;a&#39;:65,&#39;b&#39;:66,&#39;c&#39;:67,
+            &#39;d&#39;:68,&#39;e&#39;:69,&#39;f&#39;:70,&#39;g&#39;:71,&#39;h&#39;:72,&#39;i&#39;:73,&#39;j&#39;:74,&#39;k&#39;:75,
+            &#39;l&#39;:76,&#39;m&#39;:77,&#39;n&#39;:78,&#39;o&#39;:79,&#39;p&#39;:80,&#39;q&#39;:81,&#39;r&#39;:82,&#39;s&#39;:83,
+            &#39;t&#39;:84,&#39;u&#39;:85,&#39;v&#39;:86,&#39;w&#39;:87,&#39;x&#39;:88,&#39;y&#39;:89,&#39;z&#39;:90,&#39;A&#39;:65,
+            &#39;B&#39;:66,&#39;C&#39;:67,&#39;D&#39;:68,&#39;E&#39;:69,&#39;F&#39;:70,&#39;G&#39;:71,&#39;H&#39;:72,&#39;I&#39;:73,
+            &#39;J&#39;:74,&#39;K&#39;:75,&#39;L&#39;:76,&#39;M&#39;:77,&#39;N&#39;:78,&#39;O&#39;:79,&#39;P&#39;:80,&#39;Q&#39;:81,
+            &#39;R&#39;:82,&#39;S&#39;:83,&#39;T&#39;:84,&#39;U&#39;:85,&#39;V&#39;:86,&#39;W&#39;:87,&#39;X&#39;:88,&#39;Y&#39;:89,&#39;Z&#39;:90 }
+    }
+};</pre>
+
+<p>})(jQuery);</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

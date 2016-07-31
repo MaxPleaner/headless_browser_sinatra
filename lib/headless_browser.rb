@@ -88,10 +88,9 @@ class HeadlessBrowser
   
   # transform the params object
   def transform_params(params_obj)
-    return make_hash_keys_symbols(
-      params_obj.merge(
-        coords: params_obj[:click_coords]&.split(",")
-      )
+    params_with_symbol_keys = make_hash_keys_symbols(params_obj)
+    return params_with_symbol_keys.merge(
+      coords: params_with_symbol_keys[:click_coords]&.split(",")
     )
   end
   
@@ -124,7 +123,7 @@ class HeadlessBrowser
       false
     end
   end
-  
+
   # saves a screenshot to "public/screenshot.jog"
   def screenshot
     # the path sent to clients

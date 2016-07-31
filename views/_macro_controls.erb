@@ -1,0 +1,19 @@
+
+<% is_macro_recording_on = !!Routes::Macro[:status] %>
+<% current_macro_has_content = !Routes::CurrentMacro.empty? %>
+
+<div id="macro-controls">
+  <% if is_macro_recording_on %>
+    <a href="/macro_off">stop macro recording</a>
+  <% else %>
+    <% if current_macro_has_content %>
+      <form action="macro_save">
+        <input type="text" name="name" placeholder="macro name">
+        <input type="submit" value="save most recent macro">
+      </form>
+    <% end %>
+    <a href="/macro_on">start macro recording</a>
+    <%= "Will overwrite last macro!" if current_macro_has_content %>
+  <% end %>
+</div>
+

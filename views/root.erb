@@ -1,55 +1,22 @@
-<div id="errors">
-  <%# show errors if any exist %>
-  <%# this is used to pass generic messages as well %>
-  <%= @error %>
-</div>
+<% if @error&.length&.send(:>, 0) %>
+  <br><div id="errors">
+    <%# show errors if any exist %>
+    <%# this is used to pass generic messages as well %>
+    <%= @error %>
+  </div>
+<% end %>
 
-<%= @macros %>
-
-<div id="forms-container">
-  
-  <div id="refresh-form">
-    <%# Form to refresh the firefox page %>
-    <form action="/">
-      <input type="hidden" name="refresh" value="true">
-      <input type="submit" value="refresh"><br>
-      <small><i>runs <code>location.reload</code><br>on the selenium browser</i></small>
-    </form>
-  </div>
-  
-  <div id="navigate-form">
-    <%# Form to navigate to a url %>
-    <form action="/">
-      <input type="submit" value="go to url"><br>
-      <input type="text" name="url" placeholder="url goes here"><br>
-      <small><i>i.e. <code>Google</code> or<br><code>http://google.com</code></i></small>
-    </form>
-  </div>
-  
-  <div id="send-text-form">
-    <%# Form to send text to a selected node %>
-    <%# Before doing this, an input should be clicked on the firefox page %>
-    <form action="/">
-      <input type="submit" value="send text"> <br>
-      <input type="text" name="enter_text" placeholder="text goes here"><br>
-      <small><i>Click an input<br>on the page first</i></small>
-    </form>
-  </div>
-  
-  <div id="delay-screenshot-form">
-    <%# Form to set the 'delay_screenshot' setting on the server %>
-    <%# This will delay taking a screenshot for n seconds to ensure the page has loaded %>
-    <form action="/">
-      <input type="submit" value="delay screenshot"><br>
-      <input type="number" name="delay_screenshot" placeholder="number of seconds"><br>
-      <small><i>longer load time,<br>but more accurate UI</i></small>
-    </form>
-  </div>
-
-  <div class="clearfix"></div>
-</div> <!-- #forms-container -->
+<% if @running_macro_name && @running_macro_current_command %>
+  <%= erb :_running_macro %>
+<% else %>
+  <%= erb :_macro_controls %>
+  <%= erb :_macros_list %>
+  <%= erb :_forms %>
+<% end %>
 
 <div id="current-screenshot">
   <%# The current screenshot of the active Firefox page %>
   <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
 </div>
+
+

@@ -1,0 +1,14 @@
+
+<div id="macros-list">
+  <h4>Macros</h4>
+  <% @macros.each do |name, content| %>
+    <div class="macros-list-item">
+      <b><%= name %></b>
+      <div class="pull-right">
+        <a href="macro_edit?name=<%= name %>">Edit</a>
+        <a href="macro_run?name=<%= name %>">Run</a>
+      </div>
+    </div>
+  <% end %>
+</div>
+
