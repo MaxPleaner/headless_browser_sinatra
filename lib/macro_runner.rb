@@ -42,7 +42,7 @@ module MacroRunner
   # them to the front of the RunningCommand[:cmd] list, and run the first.
   def run_macro_command(macro_name, current_command)
     setup_headless_env
-    if current_command.has_key?(:macro)
+    if current_command.has_key?('macro')
       expand_macro_into_running_command(current_command)
       current_command = Routes::RunningCommand[:cmd].shift
     end
@@ -56,9 +56,9 @@ module MacroRunner
   end
   
   def expand_macro_into_running_command(current_command)
-    macro_name = current_command[:macro]
+    macro_name = current_command['macro']
     macro_content = []
-    db.transaction { macro_content = db[macro_name] }
+    db.transaction { macro_content = YAML.load(db[macro_name]) }
     macro_content.each { |cmd| Routes::RunningCommand[:cmd].unshift(cmd) }
     return self
   end
