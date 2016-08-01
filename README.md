@@ -1,29 +1,34 @@
-This is a Sinatra app with route definitions in `start_server.rb`
+Installation:
 
-It requires `lib/headless_browser.rb`, which runs `headless` and `selenium-webdriver`.
+ 1. `sh install.sh`
+ 2. `bundle`
 
-This will not work out the box since it requires a custom firefox binary. Selenium currently works with Firefox 46, which is not the
-newest version.
-
-To install dependencies and set up the correct Firebox binary, run `install.sh`.
-
-After this is done, run `ruby start_server.rb` and visit `localhost:4567?url=google` in the browser.
-
----
+  _note_ the install script is for Ubuntu x86_64 specifically.
+  
+  To use this project on a differet system, read the `install.sh` file for a list of dependencies and install them using
+  your package manager. Also replace the firefox source url with one compiled for your system's specs.
 
 Usage:
 
-Go to the website, http://localhost:4567
+ 1. `ruby start_server.rb`
+ 2. visit `localhost:4567`
 
-Then where it says "type website name" enter some url and submit that form
+About:
 
-You will then see an image showing the result of visiting that url in the headless browser.
-
-You can click around the page and see the effect.
-
-To enter text, click on an input or textarea and then use the "send text to selected node" form.
-
-If there are any bugs, hit the "refresh" button. 
-
-
-
+  This is a Sinatra web application.
+  
+  It uses the `headless` and `selenium-webdriver` gems to launch a firefox browser.
+  
+  It runs commands on the firefox browser.
+  
+  It shows the firefox browser's current state as a screenshot
+  
+  It can forward clicks to the firefox browser, enter text, and execute arbitrary javascript.
+  
+  It records macros of command sequences and replays them.
+  
+  It can nest macros.
+  
+  It handles alerts/prompts/confirms to address selenium's shortcomings.
+  
+Here's [a screencast]() to see it in action.
