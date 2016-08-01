@@ -31,4 +31,4 @@ About:
   
   It handles alerts/prompts/confirms to address selenium's shortcomings.
   
-Here's [a screencast]() to see it in action.
+Here's [a screencast](https://www.youtube.com/watch?v=9h89fxNTt7s) to see it in action.
