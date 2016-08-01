@@ -23,9 +23,5 @@ rm firefox-46.0.linux-x86_64.sdk.tar.bz2
 # Rename
 mv firefox-sdk lib/
 
-# Symlink
-cd lib
-ln -s firefox-sdk/bin/firefox .
-
 # Done
 echo "Firefox 46 binary generated"

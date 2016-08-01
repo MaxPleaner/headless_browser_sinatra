@@ -42,7 +42,7 @@ class HeadlessBrowser
 
   # lib/firefox is a symlink to firefox-sdk/bin/firefox
   def self.set_firefox_binary_path!
-    Selenium::WebDriver::Firefox::Binary.path = "./lib/firefox"
+    Selenium::WebDriver::Firefox::Binary.path = "./lib/firefox-sdk/bin/firefox"
   end
   
   # Create a firefox driver that can be passed to HeadlessBrowser.new
