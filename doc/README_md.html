@@ -82,38 +82,48 @@
 
 <main role="main" aria-label="Page README.md">
 
-<p>This is a Sinatra app with route definitions in
-<code>start_server.rb</code></p>
+<p>Installation:</p>
+<ol><li>
+<p><code>sh install.sh</code></p>
+</li><li>
+<p><code>bundle</code></p>
+</li></ol>
 
-<p>It requires <code>lib/headless_browser.rb</code>, which runs
-<code>headless</code> and <code>selenium-webdriver</code>.</p>
+<p><em>note</em> the install script is for Ubuntu x86_64 specifically.</p>
 
-<p>This will not work out the box since it requires a custom firefox binary.
-<a href="Selenium.html">Selenium</a> currently works with Firefox 46, which
-is not the newest version.</p>
-
-<p>To install dependencies and set up the correct Firebox binary, run
-<code>install.sh</code>.</p>
-
-<p>After this is done, run <code>ruby start_server.rb</code> and visit
-<code>localhost:4567?url=google</code> in the browser.</p>
-<hr>
+<p>To use this project on a differet system, read the <code>install.sh</code>
+file for a list of dependencies and install them using  your package
+manager. Also replace the firefox source url with one compiled for your
+system&#39;s specs.</p>
 
 <p>Usage:</p>
+<ol><li>
+<p><code>ruby start_server.rb</code></p>
+</li><li>
+<p>visit <code>localhost:4567</code></p>
+</li></ol>
 
-<p>Go to the website, <a href="http://localhost:4567">localhost:4567</a></p>
+<p>About:</p>
 
-<p>Then where it says “type website name” enter some url and submit that form</p>
+<p>This is a Sinatra web application.</p>
 
-<p>You will then see an image showing the result of visiting that url in the
-headless browser.</p>
+<p>It uses the <code>headless</code> and <code>selenium-webdriver</code> gems
+to launch a firefox browser.</p>
 
-<p>You can click around the page and see the effect.</p>
+<p>It runs commands on the firefox browser.</p>
 
-<p>To enter text, click on an input or textarea and then use the “send text to
-selected node” form.</p>
+<p>It shows the firefox browser&#39;s current state as a screenshot</p>
 
-<p>If there are any bugs, hit the “refresh” button.</p>
+<p>It can forward clicks to the firefox browser, enter text, and execute
+arbitrary javascript.</p>
+
+<p>It records macros of command sequences and replays them.</p>
+
+<p>It can nest macros.</p>
+
+<p>It handles alerts/prompts/confirms to address selenium&#39;s shortcomings.</p>
+
+<p>Here&#39;s {a screencast}[] to see it in action.</p>
 </main>
 
 

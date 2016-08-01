@@ -55,7 +55,18 @@
   <div id="class-metadata">
     
     
-    
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="MacroRunner.html">MacroRunner</a>
+  
+  
+  </ul>
+</div>
+
     
     <!-- Method Quickref -->
 <div id="method-list-section" class="nav-section">
@@ -65,15 +76,33 @@
     
     <li ><a href="#method-c-included">::included</a>
     
+    <li ><a href="#method-i-add_macro_to_current_macro">#add_macro_to_current_macro</a>
+    
+    <li ><a href="#method-i-add_to_current_macro">#add_to_current_macro</a>
+    
     <li ><a href="#method-i-all_macros">#all_macros</a>
     
+    <li ><a href="#method-i-continue_macro_run">#continue_macro_run</a>
+    
     <li ><a href="#method-i-db">#db</a>
+    
+    <li ><a href="#method-i-delete_macro">#delete_macro</a>
+    
+    <li ><a href="#method-i-edit_macro">#edit_macro</a>
+    
+    <li ><a href="#method-i-macro_content_is_valid-3F">#macro_content_is_valid?</a>
+    
+    <li ><a href="#method-i-macro_update_error_msg">#macro_update_error_msg</a>
+    
+    <li ><a href="#method-i-replay_macro">#replay_macro</a>
     
     <li ><a href="#method-i-save_current_macro">#save_current_macro</a>
     
     <li ><a href="#method-i-turn_macro_recording_off">#turn_macro_recording_off</a>
     
     <li ><a href="#method-i-turn_macro_recording_on">#turn_macro_recording_on</a>
+    
+    <li ><a href="#method-i-update_macro">#update_macro</a>
     
   </ul>
 </div>
@@ -87,19 +116,7 @@
   </h1>
 
   <section class="description">
-    <ul><li>
-<p>The <a href="MacroHelpers.html">MacroHelpers</a> class is used by
-lib/sinatra_routes.rb</p>
-</li><li>
-<p>It defines two constants on the <a href="Routes.html">Routes</a> class:
-“Macro” and “CurrentMacro”</p>
-</li><li>
-<p>It also defines the content for a few routes in its own “MacroRoutes”
-constant</p>
-</li></ul>
-
-<h1 id="module-MacroHelpers-label-The+macros+feature+is+intended+to+record+command+sequences-2C+save+them-2C+and+replay+them.">The macros feature is intended to record command sequences, save them, and replay them.<span><a href="#module-MacroHelpers-label-The+macros+feature+is+intended+to+record+command+sequences-2C+save+them-2C+and+replay+them.">&para;</a> <a href="#top">&uarr;</a></span></h1>
-
+    
   </section>
 
   
@@ -140,7 +157,7 @@ constant</p>
 
           
           <div class="method-source-code" id="included-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 13</span>
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
   
   <span class="ruby-comment"># Persistent storage</span>
@@ -151,6 +168,9 @@ constant</p>
 
   <span class="ruby-comment"># Track the current macro before it is saved</span>
   <span class="ruby-identifier">base</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-string">&quot;CurrentMacro&quot;</span>, [])
+  
+  <span class="ruby-comment"># Track which macro is currently running, if any</span>
+  <span class="ruby-identifier">base</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-string">&quot;RunningCommand&quot;</span>, { <span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-identifier">cmd</span><span class="ruby-operator">:</span> [] })
 
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -171,10 +191,113 @@ constant</p>
        </header>
 
     
+      <div id="method-i-add_macro_to_current_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_macro_to_current_macro</span><span
+            class="method-args">(name)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>macro nesting</p>
+          
+          
+
+          
+          <div class="method-source-code" id="add_macro_to_current_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 184</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_macro_to_current_macro</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">push</span>({<span class="ruby-string">&#39;macro&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>})
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-add_to_current_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_to_current_macro</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>saves params to the CurrentMacro list</p>
+          
+          
+
+          
+          <div class="method-source-code" id="add_to_current_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_current_macro</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params_obj</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">any?</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-all_macros" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">all_macros</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>provides a list of macro objects which is displayed by root.erb</p>
+          
+          
+
+          
+          <div class="method-source-code" id="all_macros-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">all_macros</span>
+  <span class="ruby-identifier">results</span> = {}
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>.<span class="ruby-identifier">roots</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">results</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">k</span>]) } }
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">results</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-continue_macro_run" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">continue_macro_run</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -189,13 +312,10 @@ constant</p>
           
 
           
-          <div class="method-source-code" id="all_macros-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 72</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">all_macros</span>
-  <span class="ruby-identifier">results</span> = {}
-  <span class="ruby-comment"># db.roots is like Hash#keys</span>
-  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>.<span class="ruby-identifier">roots</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">results</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">k</span>]) } }
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">results</span>
+          <div class="method-source-code" id="continue_macro_run-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 188</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">continue_macro_run</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">continue_running_macro</span> <span class="ruby-comment"># defined in macro_runner</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -226,9 +346,209 @@ constant</p>
 
           
           <div class="method-source-code" id="db-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 26</span>
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">db</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Database</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-delete_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_macro</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>content for /macro_delete route</p>
+          
+          
+
+          
+          <div class="method-source-code" id="delete_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 152</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_macro</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-identifier">found_macro</span> = []
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">found_macro</span> = <span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>] }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">found_macro</span>
+    <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>) }
+    <span class="ruby-identifier">message</span> = <span class="ruby-node">&quot;deleted macro #{name}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-node">&quot;failed to delete macro #{name}: it couldn&#39;t be found&quot;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-edit_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">edit_macro</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>content for /macro_edit route</p>
+          
+          
+
+          
+          <div class="method-source-code" id="edit_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 102</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_macro</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-identifier">macro</span> = []
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">macro</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>]) }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">macro</span>
+    <span class="ruby-ivar">@macro_name</span> = <span class="ruby-identifier">name</span>
+    <span class="ruby-ivar">@macro_content</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">macro</span>)
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:edit_macro</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-string">&quot;Macro not found by that name&quot;</span>)
+    <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-macro_content_is_valid-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">macro_content_is_valid?</span><span
+            class="method-args">(macro_content)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="macro_content_is_valid-3F-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">macro_content_is_valid?</span>(<span class="ruby-identifier">macro_content</span>)
+  <span class="ruby-identifier">macro_content</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span>     <span class="ruby-identifier">macro_content</span>.<span class="ruby-identifier">all?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-macro_update_error_msg" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">macro_update_error_msg</span><span
+            class="method-args">(msg)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="macro_update_error_msg-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">macro_update_error_msg</span>(<span class="ruby-identifier">msg</span>)
+  <span class="ruby-node">&quot;Error: #{msg}&lt;br&gt;
+  Did not update macro.&lt;br&gt;
+  Please fix macro and try again&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-replay_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">replay_macro</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>content for /macro_play route</p>
+          
+          
+
+          
+          <div class="method-source-code" id="replay_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 168</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">replay_macro</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-identifier">name</span> = <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-identifier">found_macro</span> = []
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">found_macro</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>]) }
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">found_macro</span>
+    <span class="ruby-identifier">add_macro_to_current_macro</span>(<span class="ruby-identifier">name</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">start_running_macro</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">found_macro</span>) <span class="ruby-comment"># defined in macro_runner</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(
+      <span class="ruby-string">&quot;Can&#39;t replay that macro. It couldn&#39;t be found.&quot;</span>
+    )
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -253,13 +573,13 @@ constant</p>
 
         <div class="method-description">
           
-          
+          <p>content for /macro_save route</p>
           
           
 
           
           <div class="method-source-code" id="save_current_macro-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 54</span>
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 74</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">save_current_macro</span>(<span class="ruby-identifier">given_params</span>)
   <span class="ruby-identifier">name</span> = <span class="ruby-identifier">given_params</span>[<span class="ruby-value">:name</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot; &quot;</span>, <span class="ruby-string">&quot;-&quot;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">empty?</span>
@@ -272,9 +592,11 @@ constant</p>
     <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Can&#39;t save macro while recording&quot;</span>
     <span class="ruby-identifier">failure</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">to_json</span> }
+    <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>) }
+    <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">clear</span> <span class="ruby-comment"># empty it out.</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -300,13 +622,13 @@ constant</p>
 
         <div class="method-description">
           
-          
+          <p>content for /macro_off route</p>
           
           
 
           
           <div class="method-source-code" id="turn_macro_recording_off-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 43</span>
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 61</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">turn_macro_recording_off</span>(<span class="ruby-identifier">given_params</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>] = <span class="ruby-keyword">nil</span>
@@ -315,6 +637,7 @@ constant</p>
     <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Cant turn macro recording off, it is not on&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -346,17 +669,69 @@ constant</p>
 
           
           <div class="method-source-code" id="turn_macro_recording_on-source">
-            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 31</span>
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">turn_macro_recording_on</span>(<span class="ruby-identifier">given_params</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>]
     <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Cant turn macro on, it is already on&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">clear</span> <span class="ruby-comment"># empties array</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Macro</span>[<span class="ruby-value">:status</span>] = <span class="ruby-string">&quot;on&quot;</span>
     <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Turned macro recording on&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_macro</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>content for /macro_update route</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_helpers.rb, line 129</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_macro</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-ivar">@macro_name</span> = <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-identifier">yaml_content</span> = <span class="ruby-identifier">params_obj</span>[<span class="ruby-value">:content</span>]
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">parsed_content</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">yaml_content</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">macro_content_is_valid?</span>(<span class="ruby-identifier">parsed_content</span>)
+      <span class="ruby-ivar">@macro_content</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">parsed_content</span>)
+      <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">db</span>[<span class="ruby-ivar">@macro_name</span>] = <span class="ruby-ivar">@macro_content</span> }
+      <span class="ruby-ivar">@message</span> = <span class="ruby-node">&quot;updated #{@macro_name} macro&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">macro_update_error_message</span>(
+        <span class="ruby-string">&quot;content is not an array of hashes&quot;</span>
+      )
+      <span class="ruby-ivar">@failed_macro_edit</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">parsed_content</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Psych</span><span class="ruby-operator">::</span><span class="ruby-constant">SyntaxError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span> <span class="ruby-comment"># an error relating to YAML parsing</span>
+    <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">macro_update_error_msg</span>(<span class="ruby-identifier">e</span>)
+    <span class="ruby-ivar">@failed_macro_edit</span> = <span class="ruby-identifier">yaml_content</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:edit_macro</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           

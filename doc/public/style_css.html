@@ -82,7 +82,8 @@
 
 <main role="main" aria-label="Page public/style.css">
 
-<p>F   Body and HTML</p>
+<pre class="ruby"><span class="ruby-constant">Body</span> <span class="ruby-keyword">and</span> <span class="ruby-constant">HTML</span>
+</pre>
 
 <p>body, html {</p>
 
@@ -133,9 +134,14 @@ margin: 10px;</pre>
 
 <p>}</p>
 
-<p>/* Errors and messages */ errors {</p>
+<p>/* Errors and messages */ errors, message {</p>
 
 <pre>margin-left: 20px;
+margin-bottom: 20px;
+background-color: rgba(123, 123, 123, .5);
+display: inline-block;
+padding: 15px;
+
 /*border: 1px solid white;*/</pre>
 
 <p>}</p>
@@ -143,7 +149,7 @@ margin: 10px;</pre>
 <p>/* Container for forms */ forms-container {</p>
 
 <pre>margin: 10px;
-width: 900px;
+width: 1100px;
 padding: 10px;</pre>
 
 <p>} forms-container form {</p>
@@ -182,6 +188,50 @@ padding: 10px;</pre>
 <p>}</p>
 
 <p>/* Current screenshot img */ current-screenshot {</p>
+
+<p>}</p>
+
+<p>/* index page&#39;s on/off/save buttons for macro recording */</p>
+
+<pre>#macro-controls {
+  margin-left: 40px;
+}
+
+/* index page&#39;s list of macros */
+#macros-list {
+  margin-left: 30px;
+  display: inline-block;
+  padding: 10px 10px 10px;
+}
+
+.macros-list-item {
+  border: 1px dotted darkgrey;
+  padding: 5px;
+}</pre>
+
+<p>edit-macro-page {</p>
+
+<pre>margin-left: 30px;</pre>
+
+<p>} .pull-right {</p>
+
+<pre>float: right;
+padding-left: 20px;</pre>
+
+<p>}</p>
+
+<p>macro-content {</p>
+
+<pre>width: 400px;
+height: 350px;</pre>
+
+<p>}</p>
+
+<p>macro-name {</p>
+
+<pre>margin-left: 20px;
+font-size: 25px;
+text-decoration: italic;</pre>
 
 <p>}</p>
 </main>

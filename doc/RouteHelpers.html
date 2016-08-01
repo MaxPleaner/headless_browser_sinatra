@@ -63,11 +63,15 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-add_to_current_macro">#add_to_current_macro</a>
-    
     <li ><a href="#method-i-default_screenshot">#default_screenshot</a>
     
+    <li ><a href="#method-i-ensure_params_contains_a_command">#ensure_params_contains_a_command</a>
+    
     <li ><a href="#method-i-execute_commands_and_return_screenshot">#execute_commands_and_return_screenshot</a>
+    
+    <li ><a href="#method-i-instructions_for_manually_handling_alert">#instructions_for_manually_handling_alert</a>
+    
+    <li ><a href="#method-i-prevent_unhandled_alert_errors-21">#prevent_unhandled_alert_errors!</a>
     
     <li ><a href="#method-i-rescue_headless_browser_errors_and_messages">#rescue_headless_browser_errors_and_messages</a>
     
@@ -121,39 +125,6 @@ href="Routes.html">Routes</a> class</p>
        </header>
 
     
-      <div id="method-i-add_to_current_macro" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">add_to_current_macro</span><span
-            class="method-args">(params_obj)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>saves params to the Macros object</p>
-          
-          
-
-          
-          <div class="method-source-code" id="add_to_current_macro-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 11</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_current_macro</span>(<span class="ruby-identifier">params_obj</span>)
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">CurrentMacro</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">params_obj</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
       <div id="method-i-default_screenshot" class="method-detail ">
         
         <div class="method-heading">
@@ -173,9 +144,48 @@ href="Routes.html">Routes</a> class</p>
 
           
           <div class="method-source-code" id="default_screenshot-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 68</span>
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-identifier">message</span>)
   [<span class="ruby-string">&quot;./screenshot.jpg&quot;</span>, <span class="ruby-identifier">message</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-ensure_params_contains_a_command" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">ensure_params_contains_a_command</span><span
+            class="method-args">(params_obj)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>If the params are empty (i.e. the browser goes to “localhost:4567”) prevent
+any screenshot being taken by raising a <a
+href="HeadlessBrowserMessage.html">HeadlessBrowserMessage</a> This gets
+rescued by “rescue_headless_browser_errors_and_messages” to show the most
+recent screenshot, if one exists</p>
+          
+          
+
+          
+          <div class="method-source-code" id="ensure_params_contains_a_command-source">
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_params_contains_a_command</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">valid_commands_list</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">params_obj</span>[<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_s</span>] }
+    <span class="ruby-identifier">raise</span>(<span class="ruby-constant">HeadlessBrowserMessage</span>, <span class="ruby-string">&quot;&quot;</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -191,7 +201,7 @@ href="Routes.html">Routes</a> class</p>
         
         <div class="method-heading">
           <span class="method-name">execute_commands_and_return_screenshot</span><span
-            class="method-args">(params, most_recent_screenshot)</span>
+            class="method-args">(params_obj)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -200,21 +210,112 @@ href="Routes.html">Routes</a> class</p>
 
         <div class="method-description">
           
-          <p>execute commands on the headless browser by interpreting the params</p>
+          <p>execute commands on the headless browser by interpreting the params Some
+command raise a <a
+href="HeadlessBrowserError.html">HeadlessBrowserError</a> or <a
+href="HeadlessBrowserMessage.html">HeadlessBrowserMessage</a>, in which
+case the screenshot will not be taken. A rescue block in
+“rescue_headless_browser_errors_and_messages” will handle these cases.</p>
           
           
 
           
           <div class="method-source-code" id="execute_commands_and_return_screenshot-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 56</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_commands_and_return_screenshot</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">most_recent_screenshot</span>)
-  <span class="ruby-comment"># generate a new screenshot or don&#39;t, depending on the commands being run</span>
-  <span class="ruby-identifier">should_send_screenshot</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">process_params</span>(<span class="ruby-identifier">params</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">should_send_screenshot</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">driver_helpers</span>.<span class="ruby-identifier">sync_scripts</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">screenshot</span>
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">execute_commands_and_return_screenshot</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">process_params</span>(<span class="ruby-identifier">params_obj</span>)
+  <span class="ruby-identifier">prevent_unhandled_alert_errors!</span> <span class="ruby-comment"># check for alerts after running commands so that the UI can be updated</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">screenshot</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-instructions_for_manually_handling_alert" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">instructions_for_manually_handling_alert</span><span
+            class="method-args">(text)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>present instructions to the user so they can handle an alert</p>
+          
+          
+
+          
+          <div class="method-source-code" id="instructions_for_manually_handling_alert-source">
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 97</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">instructions_for_manually_handling_alert</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-value">&lt;&lt;-TXT
+  This alert/prompt/confirm wasn&#39;t automatically handled:&lt;br&gt;&lt;br&gt;
+  #{text}&lt;br&gt;&lt;br&gt;
+  How to proceed?&lt;br&gt;&lt;br&gt;
+  &lt;form action=&#39;/confirm_alert&#39;&gt;
+    &lt;input type=&#39;submit&#39; value=&#39;confirm&#39;&gt;
+    &lt;input type=&#39;text&#39; name=&#39;text&#39; placeholder=&#39;add text&#39;&gt;
+  &lt;/form&gt;&lt;br&gt;
+  &lt;form action=&#39;/deny_alert&#39;&gt;
+    &lt;input type=&#39;submit&#39; value=&#39;deny&#39;&gt;
+  &lt;/form&gt;
+  TXT</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-prevent_unhandled_alert_errors-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">prevent_unhandled_alert_errors!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>can&#39;t wait for selenium to throw an error about alerts because at that
+point the error can no longer be handled must always check if there&#39;s
+an alert after running a command</p>
+          
+          
+
+          
+          <div class="method-source-code" id="prevent_unhandled_alert_errors-21-source">
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">prevent_unhandled_alert_errors!</span>
+  <span class="ruby-identifier">driver</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">driver_helpers</span>.<span class="ruby-identifier">driver</span>
+  <span class="ruby-identifier">alert</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">alert</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span> <span class="ruby-comment"># if rescuing, there&#39;s no alert</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">alert</span>
+    <span class="ruby-keyword">unless</span> [<span class="ruby-string">&#39;confirm_alert&#39;</span>, <span class="ruby-string">&#39;deny_alert&#39;</span>].<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>[<span class="ruby-value">:cmd</span>][<span class="ruby-value">0</span>]<span class="ruby-operator">&amp;</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>) }
+      <span class="ruby-ivar">@current_macro_run_halted</span> = <span class="ruby-keyword">true</span> <span class="ruby-comment"># make sure that a running macro is halted if the user</span>
+                                       <span class="ruby-comment"># hasn&#39;t enqueued a response to the alert</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">text</span> = <span class="ruby-identifier">alert</span>.<span class="ruby-identifier">text</span>
+    <span class="ruby-identifier">message</span> = <span class="ruby-identifier">instructions_for_manually_handling_alert</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">raise</span>(<span class="ruby-constant">HeadlessBrowserMessage</span>, <span class="ruby-identifier">message</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-identifier">most_recent_screenshot</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -240,20 +341,22 @@ href="Routes.html">Routes</a> class</p>
 
         <div class="method-description">
           
-          
+          <p>rescue <a href="HeadlessBrowserError.html">HeadlessBrowserError</a> and
+HeadlessBrowserMessages by displaying the message and displaying the most
+recent screenshot</p>
           
           
 
           
           <div class="method-source-code" id="rescue_headless_browser_errors_and_messages-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 39</span>
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">rescue_headless_browser_errors_and_messages</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
   <span class="ruby-keyword">begin</span>
     <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">HeadlessBrowserError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-    <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;Error: #{e}&quot;</span>)
+    <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;#{e}&quot;</span>)
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">HeadlessBrowserMessage</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-    <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;Message: #{e}&quot;</span>)
+    <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;#{e}&quot;</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -279,20 +382,28 @@ href="Routes.html">Routes</a> class</p>
 
         <div class="method-description">
           
-          
+          <p>Run a block of code and handle the case when Selenium throws an error When
+rescuing these errors, a <a
+href="HeadlessBrowserError.html">HeadlessBrowserError</a> message is thrown
+which is in turn rescued by “rescue_headless_browser_errors_and_messages”</p>
           
           
 
           
           <div class="method-source-code" id="rescue_selenium_javascript_errors-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 29</span>
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">rescue_selenium_javascript_errors</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
   <span class="ruby-keyword">begin</span>
     <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">call</span>
-  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">JavascriptError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
     <span class="ruby-comment"># Will raise a HeadlessBrowserError</span>
     <span class="ruby-comment"># which is in turn rescued</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">error_out</span>(<span class="ruby-identifier">e</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">driver_helpers</span>.<span class="ruby-identifier">error_out</span>(<span class="ruby-identifier">e</span>)
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">UnhandledAlertError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Browser</span>.<span class="ruby-identifier">driver_helpers</span>.<span class="ruby-identifier">error_out</span>(
+      <span class="ruby-string">&quot;An alert or modal appeared which the application doesn&#39;t \
+      know how to handle.&quot;</span>
+    )
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -309,7 +420,7 @@ href="Routes.html">Routes</a> class</p>
         
         <div class="method-heading">
           <span class="method-name">run_commands_and_handle_errors</span><span
-            class="method-args">(params, most_recent_screenshot)</span>
+            class="method-args">(params_obj)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -318,22 +429,21 @@ href="Routes.html">Routes</a> class</p>
 
         <div class="method-description">
           
-          <p>returns [screenshot_path, error_message]</p>
+          <p>runs the commands detailed in the params. takes a screenshot or returns the
+most recent screenshot, depending on the command. returns [screenshot_path,
+error_message]</p>
           
           
 
           
           <div class="method-source-code" id="run_commands_and_handle_errors-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 16</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">run_commands_and_handle_errors</span>(<span class="ruby-identifier">params</span>, <span class="ruby-identifier">most_recent_screenshot</span>)
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">run_commands_and_handle_errors</span>(<span class="ruby-identifier">params_obj</span>)
   <span class="ruby-identifier">rescue_headless_browser_errors_and_messages</span> <span class="ruby-keyword">do</span>
     <span class="ruby-identifier">rescue_selenium_javascript_errors</span> <span class="ruby-keyword">do</span>
-      <span class="ruby-identifier">screenshot_path</span> = <span class="ruby-identifier">execute_commands_and_return_screenshot</span>(
-        <span class="ruby-identifier">params</span>,
-        <span class="ruby-identifier">most_recent_screenshot</span>
-       )
-       <span class="ruby-identifier">error_message</span> = <span class="ruby-keyword">nil</span>
-      [<span class="ruby-identifier">screenshot_path</span>, <span class="ruby-identifier">error_message</span>]
+      <span class="ruby-identifier">ensure_params_contains_a_command</span>(<span class="ruby-identifier">params_obj</span>)
+      <span class="ruby-identifier">screenshot_path</span> = <span class="ruby-identifier">execute_commands_and_return_screenshot</span>(<span class="ruby-identifier">params_obj</span>)
+      [<span class="ruby-identifier">screenshot_path</span>, <span class="ruby-keyword">nil</span>]
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -367,7 +477,7 @@ unresponsive</p>
 
           
           <div class="method-source-code" id="setup_headless_env-source">
-            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 50</span>
+            <pre><span class="ruby-comment"># File lib/route_helpers.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">setup_headless_env</span>
   <span class="ruby-comment"># although this occasionally fails, it seems to be temporary and refreshing the page can help.</span>
   <span class="ruby-constant">RoutesInit</span>.<span class="ruby-identifier">connect_to_firefox_with_timeout</span>(<span class="ruby-value">20</span>)

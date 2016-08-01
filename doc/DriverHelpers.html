@@ -157,32 +157,6 @@
         </div>
       </div>
       
-      <div id="attribute-i-scripts_been_sent" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">scripts_been_sent</span><span
-            class="attribute-access-type">[R]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-should_send_click_listeners" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">should_send_click_listeners</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
     </section>
     
 
@@ -212,18 +186,9 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 28</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">driver</span>)
   <span class="ruby-ivar">@driver</span> = <span class="ruby-identifier">driver</span>
-  
-  <span class="ruby-comment"># avoid re-sending large scripts to the same page</span>
-  <span class="ruby-comment"># i.e. jquery, jquery.autotype</span>
-  <span class="ruby-ivar">@scripts_been_sent</span> = {}
-                          
-  <span class="ruby-comment"># on click is sent upon every click</span>
-  <span class="ruby-comment"># to ensure that the event listeners are defined</span>
-  <span class="ruby-comment"># Some sites dont allow this, which is why it&#39;s a togglable boolean</span>
-  <span class="ruby-ivar">@should_send_click_listeners</span> = <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -262,7 +227,7 @@
 
           
           <div class="method-source-code" id="click_coords-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 93</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">click_coords</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>)
   <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">javascript_code</span> = <span class="ruby-value">&lt;&lt;-JS
@@ -311,7 +276,7 @@ connection yet exists for this</p>
 
           
           <div class="method-source-code" id="click_selector-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 73</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">click_selector</span>(<span class="ruby-identifier">selector</span>)
   <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">elements</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">find_elements</span>(<span class="ruby-value">:css</span>, <span class="ruby-identifier">selector</span>)
@@ -350,7 +315,7 @@ connection yet exists for this</p>
 
           
           <div class="method-source-code" id="driver_has_current_page-3F-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 43</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">driver_has_current_page?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">current_url</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;about:blank&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -384,7 +349,7 @@ screenshot</p>
 
           
           <div class="method-source-code" id="ensure_current_page_exists-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 49</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">driver_has_current_page?</span>
     <span class="ruby-value">%x`rm public/screenshot.jpg`</span>
@@ -421,7 +386,7 @@ screenshot</p>
 
           
           <div class="method-source-code" id="ensure_element_is_selected-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 130</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_element_is_selected</span>
   <span class="ruby-identifier">is_element_there</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(
     <span class="ruby-string">&quot;return (typeof(window.lastSelectedElement) !== &#39;undefined&#39;)&quot;</span>
@@ -460,7 +425,7 @@ screenshot</p>
 
           
           <div class="method-source-code" id="enter_text-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 113</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 103</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">enter_text</span>(<span class="ruby-identifier">text</span>)
   <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">ensure_element_is_selected</span>
@@ -506,7 +471,7 @@ an error</p>
 
           
           <div class="method-source-code" id="error_out-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 86</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">error_out</span>(<span class="ruby-identifier">text</span>)
    <span class="ruby-comment"># Refresh the page using Selenium API. Firefox&#39;s JS environment resets.</span>
   <span class="ruby-identifier">refresh_failsafe</span>
@@ -543,7 +508,7 @@ this app uses jquery.autotype instead</p>
 
           
           <div class="method-source-code" id="find_element_with_selector-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 202</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 197</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">find_element_with_selector</span>(<span class="ruby-identifier">selector</span>)
   <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(<span class="ruby-node">&quot;return $(&#39;#{selector}&#39;)[0]&quot;</span>)
@@ -578,10 +543,9 @@ this app uses jquery.autotype instead</p>
 
           
           <div class="method-source-code" id="navigate-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 58</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">navigate</span>(<span class="ruby-identifier">url</span>)
   <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">navigate</span>.<span class="ruby-identifier">to</span>(<span class="ruby-identifier">url</span>)
-  <span class="ruby-identifier">sync_scripts</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -616,9 +580,8 @@ there&#39;s no UI for this), this is mandatory to support text entry.</p>
 
           
           <div class="method-source-code" id="on_click_script-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 211</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">on_click_script</span>
-  <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">script</span> = <span class="ruby-value">&lt;&lt;-JS
   window.hasOnClick = true
    $(&quot;input, textarea&quot;).on(&quot;click&quot;, function(e) {
@@ -662,7 +625,7 @@ there&#39;s no UI for this), this is mandatory to support text entry.</p>
 
           
           <div class="method-source-code" id="press_enter-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 229</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 223</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">press_enter</span>
   <span class="ruby-identifier">ensure_element_is_selected</span>
   <span class="ruby-identifier">script</span> = <span class="ruby-value">&lt;&lt;-JS
@@ -698,7 +661,7 @@ there&#39;s no UI for this), this is mandatory to support text entry.</p>
 
           
           <div class="method-source-code" id="refresh-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 141</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">refresh</span>
   <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(<span class="ruby-string">&quot;window.location.reload()&quot;</span>)
@@ -734,7 +697,7 @@ errors</p>
 
           
           <div class="method-source-code" id="refresh_failsafe-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 149</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 139</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">refresh_failsafe</span>
   <span class="ruby-identifier">navigate</span>(<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">current_url</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
@@ -768,10 +731,11 @@ errors</p>
 
           
           <div class="method-source-code" id="send_jquery_autotype_if_undefined-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 173</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 162</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_jquery_autotype_if_undefined</span>
   <span class="ruby-identifier">is_script_loaded</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(
-    <span class="ruby-string">&quot;return typeof($.fn.autotype)&quot;</span>
+    <span class="ruby-string">&quot;if ((!$) || !($.fn)) { return false } \
+    else { return typeof($.fn.autotype) }&quot;</span>
   ).<span class="ruby-identifier">eql?</span>(<span class="ruby-string">&#39;function&#39;</span>)
   <span class="ruby-identifier">send_static_script</span>(<span class="ruby-string">&quot;./public/jquery.autotype.js&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">is_script_loaded</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
@@ -805,7 +769,7 @@ errors</p>
 
           
           <div class="method-source-code" id="send_jquery_if_undefined-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 163</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 152</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_jquery_if_undefined</span>
   <span class="ruby-identifier">is_jquery_loaded</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(<span class="ruby-string">&quot;return typeof($)&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&#39;function&#39;</span>
   <span class="ruby-identifier">is_jquery_fn_defined</span> = <span class="ruby-identifier">is_jquery_loaded</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(
@@ -843,10 +807,11 @@ errors</p>
 
           
           <div class="method-source-code" id="send_jquery_style_if_undefined-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 182</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 172</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_jquery_style_if_undefined</span>
   <span class="ruby-identifier">is_script_loaded</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(
-    <span class="ruby-string">&quot;return typeof($.fn.style)&quot;</span>
+    <span class="ruby-string">&quot;if ((!$) || !($.fn)) { return false } \
+     else { return typeof($.fn.style) }&quot;</span>
   ).<span class="ruby-identifier">eql?</span>(<span class="ruby-string">&#39;function&#39;</span>)
   <span class="ruby-identifier">send_static_script</span>(<span class="ruby-string">&quot;./public/jquery.style.js&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">is_script_loaded</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
@@ -874,13 +839,15 @@ errors</p>
 
         <div class="method-description">
           
-          <p>Sends onclick unless window.hasOnClick is true</p>
+          <p>TODO figure out if this should be sent every request or not: Currently it
+*<strong>does</strong>* because the check is commented out | | Sends
+onclick unless window.hasOnClick is true</p>
           
           
 
           
           <div class="method-source-code" id="send_on_click_if_undefined-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 191</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 186</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_on_click_if_undefined</span>
   <span class="ruby-identifier">is_script_loaded</span> = <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(
     <span class="ruby-string">&quot;return window.hasOnClick&quot;</span>
@@ -918,9 +885,8 @@ errors</p>
 
           
           <div class="method-source-code" id="send_static_script-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 155</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 145</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_static_script</span>(<span class="ruby-identifier">path</span>)
-  <span class="ruby-identifier">ensure_current_page_exists</span>
   <span class="ruby-identifier">script</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">path</span>)
   <span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(<span class="ruby-identifier">script</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
@@ -948,13 +914,13 @@ errors</p>
 
         <div class="method-description">
           
-          
+          <p>send a bunch of scripts to the client</p>
           
           
 
           
           <div class="method-source-code" id="sync_scripts-source">
-            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 64</span>
+            <pre><span class="ruby-comment"># File lib/driver_helpers.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sync_scripts</span>
   <span class="ruby-identifier">send_jquery_if_undefined</span>
   <span class="ruby-identifier">send_jquery_autotype_if_undefined</span>

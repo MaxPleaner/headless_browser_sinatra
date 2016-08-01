@@ -53,6 +53,9 @@
 
 <h2 id="classes">Classes and Modules</h2>
 <ul>
+  <li class="module">
+    <a href="AlertHelpers.html">AlertHelpers</a>
+  </li>
   <li class="class">
     <a href="DriverHelpers.html">DriverHelpers</a>
   </li>
@@ -67,10 +70,9 @@
   </li>
   <li class="module">
     <a href="MacroHelpers.html">MacroHelpers</a>
-
-    <ul>
-      <li><a href="MacroHelpers.html#label-The+macros+feature+is+intended+to+record+command+sequences-2C+save+them-2C+and+replay+them.">The macros feature is intended to record command sequences, save them, and replay them.</a>
-    </ul>
+  </li>
+  <li class="module">
+    <a href="MacroRunner.html">MacroRunner</a>
   </li>
   <li class="module">
     <a href="RouteHelpers.html">RouteHelpers</a>
@@ -81,15 +83,6 @@
   <li class="class">
     <a href="RoutesInit.html">RoutesInit</a>
   </li>
-  <li class="module">
-    <a href="Selenium.html">Selenium</a>
-  </li>
-  <li class="module">
-    <a href="Selenium/WebDriver.html">Selenium::WebDriver</a>
-  </li>
-  <li class="module">
-    <a href="Selenium/WebDriver/Firefox.html">Selenium::WebDriver::Firefox</a>
-  </li>
 </ul>
 
 <h2 id="methods">Methods</h2>
@@ -99,11 +92,6 @@
     <a href="RoutesInit.html#method-c-connect_to_firefox_with_timeout">::connect_to_firefox_with_timeout</a>
     &mdash;
     <span class="container">RoutesInit</span>
-
-  <li class="method">
-    <a href="HeadlessBrowser.html#method-c-default_screenshot_delay">::default_screenshot_delay</a>
-    &mdash;
-    <span class="container">HeadlessBrowser</span>
 
   <li class="method">
     <a href="HeadlessBrowser.html#method-c-headless_with_customization">::headless_with_customization</a>
@@ -146,9 +134,14 @@
     <span class="container">HeadlessBrowser</span>
 
   <li class="method">
-    <a href="RouteHelpers.html#method-i-add_to_current_macro">#add_to_current_macro</a>
+    <a href="MacroHelpers.html#method-i-add_macro_to_current_macro">#add_macro_to_current_macro</a>
     &mdash;
-    <span class="container">RouteHelpers</span>
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
+    <a href="MacroHelpers.html#method-i-add_to_current_macro">#add_to_current_macro</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
 
   <li class="method">
     <a href="MacroHelpers.html#method-i-all_macros">#all_macros</a>
@@ -166,6 +159,21 @@
     <span class="container">DriverHelpers</span>
 
   <li class="method">
+    <a href="AlertHelpers.html#method-i-confirm_alert">#confirm_alert</a>
+    &mdash;
+    <span class="container">AlertHelpers</span>
+
+  <li class="method">
+    <a href="MacroHelpers.html#method-i-continue_macro_run">#continue_macro_run</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
+    <a href="MacroRunner.html#method-i-continue_running_macro">#continue_running_macro</a>
+    &mdash;
+    <span class="container">MacroRunner</span>
+
+  <li class="method">
     <a href="MacroHelpers.html#method-i-db">#db</a>
     &mdash;
     <span class="container">MacroHelpers</span>
@@ -176,9 +184,24 @@
     <span class="container">RouteHelpers</span>
 
   <li class="method">
+    <a href="MacroHelpers.html#method-i-delete_macro">#delete_macro</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
+    <a href="AlertHelpers.html#method-i-deny_alert">#deny_alert</a>
+    &mdash;
+    <span class="container">AlertHelpers</span>
+
+  <li class="method">
     <a href="DriverHelpers.html#method-i-driver_has_current_page-3F">#driver_has_current_page?</a>
     &mdash;
     <span class="container">DriverHelpers</span>
+
+  <li class="method">
+    <a href="MacroHelpers.html#method-i-edit_macro">#edit_macro</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
 
   <li class="method">
     <a href="DriverHelpers.html#method-i-ensure_current_page_exists">#ensure_current_page_exists</a>
@@ -189,6 +212,11 @@
     <a href="DriverHelpers.html#method-i-ensure_element_is_selected">#ensure_element_is_selected</a>
     &mdash;
     <span class="container">DriverHelpers</span>
+
+  <li class="method">
+    <a href="RouteHelpers.html#method-i-ensure_params_contains_a_command">#ensure_params_contains_a_command</a>
+    &mdash;
+    <span class="container">RouteHelpers</span>
 
   <li class="method">
     <a href="DriverHelpers.html#method-i-enter_text">#enter_text</a>
@@ -206,9 +234,29 @@
     <span class="container">RouteHelpers</span>
 
   <li class="method">
+    <a href="MacroRunner.html#method-i-expand_macro_into_running_command">#expand_macro_into_running_command</a>
+    &mdash;
+    <span class="container">MacroRunner</span>
+
+  <li class="method">
     <a href="DriverHelpers.html#method-i-find_element_with_selector">#find_element_with_selector</a>
     &mdash;
     <span class="container">DriverHelpers</span>
+
+  <li class="method">
+    <a href="RouteHelpers.html#method-i-instructions_for_manually_handling_alert">#instructions_for_manually_handling_alert</a>
+    &mdash;
+    <span class="container">RouteHelpers</span>
+
+  <li class="method">
+    <a href="MacroHelpers.html#method-i-macro_content_is_valid-3F">#macro_content_is_valid?</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
+    <a href="MacroHelpers.html#method-i-macro_update_error_msg">#macro_update_error_msg</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
 
   <li class="method">
     <a href="HeadlessBrowser.html#method-i-make_hash_keys_symbols">#make_hash_keys_symbols</a>
@@ -236,6 +284,21 @@
     <span class="container">DriverHelpers</span>
 
   <li class="method">
+    <a href="RouteHelpers.html#method-i-prevent_unhandled_alert_errors-21">#prevent_unhandled_alert_errors!</a>
+    &mdash;
+    <span class="container">RouteHelpers</span>
+
+  <li class="method">
+    <a href="HeadlessBrowser.html#method-i-process_confirm_alert_cmd">#process_confirm_alert_cmd</a>
+    &mdash;
+    <span class="container">HeadlessBrowser</span>
+
+  <li class="method">
+    <a href="HeadlessBrowser.html#method-i-process_deny_alert_cmd">#process_deny_alert_cmd</a>
+    &mdash;
+    <span class="container">HeadlessBrowser</span>
+
+  <li class="method">
     <a href="HeadlessBrowser.html#method-i-process_params">#process_params</a>
     &mdash;
     <span class="container">HeadlessBrowser</span>
@@ -251,6 +314,11 @@
     <span class="container">DriverHelpers</span>
 
   <li class="method">
+    <a href="MacroHelpers.html#method-i-replay_macro">#replay_macro</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
     <a href="RouteHelpers.html#method-i-rescue_headless_browser_errors_and_messages">#rescue_headless_browser_errors_and_messages</a>
     &mdash;
     <span class="container">RouteHelpers</span>
@@ -264,6 +332,11 @@
     <a href="RouteHelpers.html#method-i-run_commands_and_handle_errors">#run_commands_and_handle_errors</a>
     &mdash;
     <span class="container">RouteHelpers</span>
+
+  <li class="method">
+    <a href="MacroRunner.html#method-i-run_macro_command">#run_macro_command</a>
+    &mdash;
+    <span class="container">MacroRunner</span>
 
   <li class="method">
     <a href="MacroHelpers.html#method-i-save_current_macro">#save_current_macro</a>
@@ -311,6 +384,11 @@
     <span class="container">RouteHelpers</span>
 
   <li class="method">
+    <a href="MacroRunner.html#method-i-start_running_macro">#start_running_macro</a>
+    &mdash;
+    <span class="container">MacroRunner</span>
+
+  <li class="method">
     <a href="DriverHelpers.html#method-i-sync_scripts">#sync_scripts</a>
     &mdash;
     <span class="container">DriverHelpers</span>
@@ -331,7 +409,22 @@
     <span class="container">MacroHelpers</span>
 
   <li class="method">
+    <a href="MacroHelpers.html#method-i-update_macro">#update_macro</a>
+    &mdash;
+    <span class="container">MacroHelpers</span>
+
+  <li class="method">
     <a href="HeadlessBrowser.html#method-i-url_is_really_url-3F">#url_is_really_url?</a>
+    &mdash;
+    <span class="container">HeadlessBrowser</span>
+
+  <li class="method">
+    <a href="HeadlessBrowser.html#method-i-valid_commands_list">#valid_commands_list</a>
+    &mdash;
+    <span class="container">HeadlessBrowser</span>
+
+  <li class="method">
+    <a href="HeadlessBrowser.html#method-i-wait_until_document_is_ready">#wait_until_document_is_ready</a>
     &mdash;
     <span class="container">HeadlessBrowser</span>
 </ul>

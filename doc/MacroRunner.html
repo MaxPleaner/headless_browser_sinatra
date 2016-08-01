@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module MacroRunner - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-continue_running_macro">#continue_running_macro</a>
+    
+    <li ><a href="#method-i-expand_macro_into_running_command">#expand_macro_into_running_command</a>
+    
+    <li ><a href="#method-i-run_macro_command">#run_macro_command</a>
+    
+    <li ><a href="#method-i-start_running_macro">#start_running_macro</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-MacroRunner">
+  <h1 id="module-MacroRunner" class="module">
+    module MacroRunner
+  </h1>
+
+  <section class="description">
+    
+<p>only one macro is run at a time</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-continue_running_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">continue_running_macro</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>responds to /continue_macro_run runs the next command in the
+Routes::RunningCommand sequence</p>
+          
+          
+
+          
+          <div class="method-source-code" id="continue_running_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_runner.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">continue_running_macro</span>
+  <span class="ruby-identifier">running_cmd</span> = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>[<span class="ruby-value">:cmd</span>]
+  <span class="ruby-identifier">name</span> = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>[<span class="ruby-value">:name</span>]
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">running_cmd</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;Macro #{name} is done running.&quot;</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">current_cmd</span> = <span class="ruby-identifier">running_cmd</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">run_macro_command</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">current_cmd</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-expand_macro_into_running_command" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">expand_macro_into_running_command</span><span
+            class="method-args">(current_command)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="expand_macro_into_running_command-source">
+            <pre><span class="ruby-comment"># File lib/macro_runner.rb, line 61</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">expand_macro_into_running_command</span>(<span class="ruby-identifier">current_command</span>)
+  <span class="ruby-identifier">macro_name</span> = <span class="ruby-identifier">current_command</span>[<span class="ruby-string">&#39;macro&#39;</span>]
+  <span class="ruby-identifier">macro_content</span> = []
+  <span class="ruby-identifier">db</span>.<span class="ruby-identifier">transaction</span> { <span class="ruby-identifier">macro_content</span> = <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">db</span>[<span class="ruby-identifier">macro_name</span>]) }
+  <span class="ruby-identifier">macro_content</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">cmd</span><span class="ruby-operator">|</span> <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>[<span class="ruby-value">:cmd</span>].<span class="ruby-identifier">unshift</span>(<span class="ruby-identifier">cmd</span>) }
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-run_macro_command" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">run_macro_command</span><span
+            class="method-args">(macro_name, current_command)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Runs command and sets up instance variables for the root view if it is a
+nested macro, expand it into individual commands, shift them to the front
+of the <a href=":cmd">RunningCommand</a> list, and run the first.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="run_macro_command-source">
+            <pre><span class="ruby-comment"># File lib/macro_runner.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">run_macro_command</span>(<span class="ruby-identifier">macro_name</span>, <span class="ruby-identifier">current_command</span>)
+  <span class="ruby-identifier">setup_headless_env</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_command</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">&#39;macro&#39;</span>)
+    <span class="ruby-identifier">expand_macro_into_running_command</span>(<span class="ruby-identifier">current_command</span>)
+    <span class="ruby-identifier">current_command</span> = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>[<span class="ruby-value">:cmd</span>].<span class="ruby-identifier">shift</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">run_commands_and_handle_errors</span>(<span class="ruby-identifier">current_command</span>)
+  <span class="ruby-ivar">@running_macro_name</span> = <span class="ruby-identifier">macro_name</span>
+  <span class="ruby-ivar">@running_macro_current_command</span> = <span class="ruby-identifier">current_command</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-start_running_macro" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">start_running_macro</span><span
+            class="method-args">(macro_name, list_of_command_hashes)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>responds to /macro_run route runs the first command in the sequence on the
+client side, a loop is set up to call <a
+href="MacroRunner.html#method-i-continue_running_macro">#continue_running_macro</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="start_running_macro-source">
+            <pre><span class="ruby-comment"># File lib/macro_runner.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">start_running_macro</span>(<span class="ruby-identifier">macro_name</span>, <span class="ruby-identifier">list_of_command_hashes</span>)
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">prevent_unhandled_alert_errors!</span> <span class="ruby-comment"># Don&#39;t mess up the Macro because there&#39;s an unhandled alert.</span>
+                                    <span class="ruby-comment"># Rather, cancel the macro execution and prompt the user to deal with the alert.</span>
+    <span class="ruby-identifier">running_cmd</span> = <span class="ruby-constant">Routes</span><span class="ruby-operator">::</span><span class="ruby-constant">RunningCommand</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">running_cmd</span>[<span class="ruby-value">:cmd</span>].<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">running_cmd</span>[<span class="ruby-value">:name</span>] = <span class="ruby-identifier">macro_name</span>
+      <span class="ruby-identifier">running_cmd</span>[<span class="ruby-value">:cmd</span>].<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">list_of_command_hashes</span>)
+      <span class="ruby-identifier">current_cmd</span> = <span class="ruby-identifier">running_cmd</span>[<span class="ruby-value">:cmd</span>].<span class="ruby-identifier">shift</span>
+      <span class="ruby-identifier">run_macro_command</span>(<span class="ruby-identifier">macro_name</span>, <span class="ruby-identifier">current_cmd</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(
+        <span class="ruby-node">&quot;can&#39;t start macro #{macro_name}. A macro is already running.\
+        (#{running_cmd[:name]})&quot;</span>
+      )
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">HeadlessBrowserMessage</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-ivar">@screenshot</span>, <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">default_screenshot</span>(<span class="ruby-node">&quot;#{e}&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@macros</span> = <span class="ruby-identifier">all_macros</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">erb</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
