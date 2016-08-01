@@ -113,11 +113,16 @@ class HeadlessBrowser
       process_confirm_alert_cmd(val)
     when :deny_alert
       process_deny_alert_cmd
+    when :restart_browser
+      @driver_helpers.driver.close
+      @driver_helpers.instance_variable_set(:@driver, Selenium::WebDriver.for(:firefox))
+      @driver = @driver_helpers.driver
+      `rm public/screenshot.jpg`
     end
   end
   
   def valid_commands_list
-    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert]
+    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert, :restart_browser]
   end
   
   # If there's a pending alert, confirm it (possibly send it text as well)
