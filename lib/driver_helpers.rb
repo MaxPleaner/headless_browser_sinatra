@@ -189,6 +189,9 @@ class DriverHelpers
     return self
   end
   
+  # TODO figure out if this should be sent every request or not:
+  # Currently it **does** because the check is commented out
+  # |
   # Sends onclick unless window.hasOnClick is true
   def send_on_click_if_undefined
     is_script_loaded = driver.execute_script(

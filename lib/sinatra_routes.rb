@@ -80,4 +80,24 @@ class Routes < Sinatra::Base
   get "/continue_macro_run" do
     return continue_macro_run
   end
+  
+  get "/confirm_alert" do
+    setup_headless_env
+    text = params[:text]
+    cmd = { 'confirm_alert' => text.blank? ? true : text }
+    @screenshot, @error = run_commands_and_handle_errors(cmd, 'screenshot.jpg')
+    Macro[:status] && add_to_current_macro(cmd)
+    @macros = all_macros
+    return erb(:root)
+  end
+  
+  get "/deny_alert" do
+    setup_headless_env
+    cmd = { 'deny_alert' => true }
+    @screenshot, @error = run_commands_and_handle_errors(cmd, 'screenshot.jpg')
+    Macro[:status] && add_to_current_macro(cmd)
+    @macros = all_macros
+    return erb(:root)
+  end
+  
 end

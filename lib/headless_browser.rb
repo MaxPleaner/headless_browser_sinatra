@@ -124,8 +124,36 @@ class HeadlessBrowser
     when :custom_script
       @driver_helpers.driver.execute_script(val)
       true
+    when :confirm_alert
+      text = val.eql?(true) ? nil : val
+      driver = @driver_helpers.driver
+      alert = driver.switch_to.alert rescue nil
+      if !alert
+        raise(HeadlessBrowserError, "Cant confirm alert. None was found")
+      end
+      begin
+        alert.send_keys(text) if text
+        alert.accept
+      rescue StandardError => e
+        raise(HeadlessBrowserError, e)
+      end
+      true
+    when :deny_alert
+      driver = @driver_helpers.driver
+      alert = driver.switch_to.alert rescue nil
+      if !alert
+        raise(HeadlessBrowserError, "Cant deny alert. None was found")
+      end
+      begin
+        alert.dismiss
+      rescue StandardError => e
+        raise(HeadlessBrowserError, e)
+      end
+      true
     end
+        
   end
+
 
   # saves a screenshot to "public/screenshot.jog"
   def screenshot

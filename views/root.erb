@@ -5,8 +5,7 @@
     <%= @error %>
   </div>
 <% end %>
-
-<% if @running_macro_name && @running_macro_current_command %>
+<% if (@running_macro_name && @running_macro_current_command) || (!Routes::RunningCommand[:cmd].empty? && !@current_macro_run_halted)%>
   <%= erb :_running_macro %>
 <% else %>
   <%= erb :_macro_controls %>

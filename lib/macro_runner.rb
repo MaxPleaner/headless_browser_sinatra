@@ -46,13 +46,23 @@ module MacroRunner
       expand_macro_into_running_command(current_command)
       current_command = Routes::RunningCommand[:cmd].shift
     end
-    @screenshot, @error = run_commands_and_handle_errors(
-      current_command,
-      'screenshot.jpg'
-    )
+    rescue_headless_errors do
+      @screenshot, @error = run_commands_and_handle_errors(
+        current_command,
+        'screenshot.jpg'
+      )
+    end
     @running_macro_name = macro_name
     @running_macro_current_command = current_command
     return self
+  end
+  
+  def rescue_headless_errors(&blk)
+    begin
+      blk.call
+    rescue HeadlessBrowserError => e
+      @screenshot, @error = default_screenshot(e)
+    end
   end
   
   def expand_macro_into_running_command(current_command)
