@@ -69,7 +69,6 @@ module RouteHelpers
   # in which case the screenshot will not be taken.
   # A rescue block in "rescue_headless_browser_errors_and_messages" will handle these cases.
   def execute_commands_and_return_screenshot(params_obj)
-    self.class::Browser.driver_helpers.sync_scripts
     self.class::Browser.process_params(params_obj)
     prevent_unhandled_alert_errors! # check for alerts after running commands so that the UI can be updated
     return self.class::Browser.screenshot

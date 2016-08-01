@@ -57,7 +57,6 @@ class HeadlessBrowser
     @headless_env     = headless_env
     @driver           = driver
     @driver_helpers   = DriverHelpers.new(@driver)
-    @screenshot_delay = self.class.default_screenshot_delay
     # when the app starts, delete any remnant screenshot from a previous session
     `rm public/screenshot.jpg`
   end
@@ -96,6 +95,7 @@ class HeadlessBrowser
   
   # Run the command indicated by a particular param
   def send_param(name, val)
+    driver_helpers.sync_scripts unless name.in?([:confirm_alert, :deny_alert])
     return case name
     when :click_coords
       @driver_helpers.click_coords(val[0], val[1])

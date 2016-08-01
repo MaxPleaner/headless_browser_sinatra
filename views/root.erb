@@ -5,9 +5,8 @@
     <%= @error %>
   </div>
 <% end %>
-<% if (@running_macro_name && @running_macro_current_command)%>
+<% if (@running_macro_name && @running_macro_current_command) %>
   <%= erb :_running_macro %>
-  <script>console.log('<%= @running_macro_name.to_s %>'); console.log("<%= @running_macro_current_command.to_s.gsub("\"", "'") %>")</script>
 <% else %>
   <% if Routes::RunningCommand[:cmd].length > 0 %>
     <!-- If the root page is hit but there is an incomplete running macro,

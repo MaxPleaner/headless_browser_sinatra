@@ -6,17 +6,23 @@ module MacroRunner
   # runs the first command in the sequence
   # on the client side, a loop is set up to call continue_running_macro
   def start_running_macro(macro_name, list_of_command_hashes)
-    running_cmd = Routes::RunningCommand
-    if running_cmd[:cmd].empty?
-      running_cmd[:name] = macro_name
-      running_cmd[:cmd].concat(list_of_command_hashes)
-      current_cmd = running_cmd[:cmd].shift
-      run_macro_command(macro_name, current_cmd)
-    else
-      @screenshot, @error = default_screenshot(
-        "can't start macro #{macro_name}. A macro is already running.\
-        (#{running_cmd[:name]})"
-      )
+    begin
+      prevent_unhandled_alert_errors! # Don't mess up the Macro because there's an unhandled alert.
+                                      # Rather, cancel the macro execution and prompt the user to deal with the alert.
+      running_cmd = Routes::RunningCommand
+      if running_cmd[:cmd].empty?
+        running_cmd[:name] = macro_name
+        running_cmd[:cmd].concat(list_of_command_hashes)
+        current_cmd = running_cmd[:cmd].shift
+        run_macro_command(macro_name, current_cmd)
+      else
+        @screenshot, @error = default_screenshot(
+          "can't start macro #{macro_name}. A macro is already running.\
+          (#{running_cmd[:name]})"
+        )
+      end
+    rescue HeadlessBrowserMessage => e
+      @screenshot, @error = default_screenshot("#{e}")
     end
     @macros = all_macros
     return erb(:root)
@@ -46,20 +52,10 @@ module MacroRunner
       expand_macro_into_running_command(current_command)
       current_command = Routes::RunningCommand[:cmd].shift
     end
-    rescue_headless_errors do
-      @screenshot, @error = run_commands_and_handle_errors(current_command)
-    end
+    @screenshot, @error = run_commands_and_handle_errors(current_command)
     @running_macro_name = macro_name
     @running_macro_current_command = current_command
     return self
-  end
-  
-  def rescue_headless_errors(&blk)
-    begin
-      blk.call
-    rescue HeadlessBrowserError => e
-      @screenshot, @error = default_screenshot(e)
-    end
   end
   
   def expand_macro_into_running_command(current_command)
