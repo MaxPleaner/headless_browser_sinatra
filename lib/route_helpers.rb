@@ -40,9 +40,9 @@ module RouteHelpers
     begin
       blk.call
     rescue HeadlessBrowserError => e
-      default_screenshot("Error: #{e}")
+      default_screenshot("#{e}")
     rescue HeadlessBrowserMessage => e
-      default_screenshot("Message: #{e}")
+      default_screenshot("#{e}")
     end
   end
   
@@ -71,12 +71,17 @@ module RouteHelpers
   def prevent_unhandled_alert_errors!
     driver = self.class::Browser.driver_helpers.driver
     alert = driver.switch_to.alert rescue nil # if rescuing, there's no alert
-    return self unless alert
-    @current_macro_run_halted = true # tell the client not to keep moving through the running macro sequence, if any
-                                     # if an alert is raised in a macro, the macro should include a step to handle it.
-    text = alert.text
-    message = instructions_for_manually_handling_alert(text)
-    raise(HeadlessBrowserError, message)
+    if alert
+      unless ['confirm_alert', 'deny_alert'].any? { |key| self.class::RunningCommand[:cmd][0]&.has_key?(key) }
+        @current_macro_run_halted = true # make sure that a running macro is halted if the user
+                                         # hasn't enqueued a response to the alert
+      end
+      text = alert.text
+      message = instructions_for_manually_handling_alert(text)
+      raise(HeadlessBrowserError, message)
+    else
+      return self
+    end
   end
   
   # present instructions to the user so they can handle an alert

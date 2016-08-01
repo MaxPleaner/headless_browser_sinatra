@@ -84,6 +84,7 @@ module MacroHelpers
       failure = true
     else
       db.transaction { db[name] = YAML.dump(Routes::CurrentMacro) }
+      Routes::CurrentMacro.clear # empty it out.
     end
     @screenshot, @error = default_screenshot(message)
     @macros = all_macros

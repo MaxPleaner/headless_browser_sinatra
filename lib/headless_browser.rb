@@ -76,8 +76,6 @@ class HeadlessBrowser
   # Interpret parameters from routes and run commands accordingly
   # returns a boolean indicating whether a screenshot should be taken or not
   def process_params(params_obj)
-    # delete remnant screenshot if no page is loaded
-    @driver_helpers.ensure_current_page_exists rescue nil
     given_params = transform_params(params_obj)
     # execute each of the commands and track whether the command calls for a screenshot
     should_take_screenshot_results = given_params.map do |name, val|
@@ -134,6 +132,7 @@ class HeadlessBrowser
       begin
         alert.send_keys(text) if text
         alert.accept
+        raise(HeadlessBrowserMessage, "Accepted alert")
       rescue StandardError => e
         raise(HeadlessBrowserError, e)
       end
@@ -146,10 +145,11 @@ class HeadlessBrowser
       end
       begin
         alert.dismiss
+        raise(HeadlessBrowserMessage, "Dismissed alert")
       rescue StandardError => e
         raise(HeadlessBrowserError, e)
       end
-      true
+      false
     end
         
   end

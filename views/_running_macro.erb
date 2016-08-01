@@ -2,12 +2,16 @@
 <h5> Current command: <%= @running_macro_current_command %> </h5>
 <hr>
 
-<script>
-$(function(){
-  var pauseBetweenCommandsInterval = 3000 // 3 seconds
-  function runNextCommand() {
-    window.location.href = "http://localhost:4567/continue_macro_run"
-  }
-  window.setInterval(runNextCommand, pauseBetweenCommandsInterval)
-})
-</script>
+<% if @current_macro_run_halted %>
+<h3> MACRO IS HALTED! handle the alert to proceed <h3>
+<% else %>
+  <script>
+  $(function(){
+    var pauseBetweenCommandsInterval = 3000 // 3 seconds
+    function runNextCommand() {
+      window.location.href = "http://localhost:4567/continue_macro_run"
+    }
+    window.setInterval(runNextCommand, pauseBetweenCommandsInterval)
+  })
+  </script>
+<% end %>

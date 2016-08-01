@@ -5,9 +5,17 @@
     <%= @error %>
   </div>
 <% end %>
-<% if (@running_macro_name && @running_macro_current_command) || (!Routes::RunningCommand[:cmd].empty? && !@current_macro_run_halted)%>
+<% if (@running_macro_name && @running_macro_current_command)%>
   <%= erb :_running_macro %>
 <% else %>
+  <% if Routes::RunningCommand[:cmd].length > 0 %>
+    <!-- If the root page is hit but there is an incomplete running macro,
+        the running macro will be resumed
+    -->
+    <script>
+      window.location.href = "http://localhost:4567/continue_macro_run"
+    </script>
+  <% end %>
   <%= erb :_macro_controls %>
   <%= erb :_macros_list %>
   <%= erb :_forms %>
@@ -17,5 +25,4 @@
   <%# The current screenshot of the active Firefox page %>
   <img id="page-screenshot" src="<%= @screenshot %>" alt="screenshot">
 </div>
-
 

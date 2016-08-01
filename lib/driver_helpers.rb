@@ -22,20 +22,10 @@
 # Included by lib/headless_browser.rb
 class DriverHelpers
   
-  attr_reader   :driver, :scripts_been_sent
-  attr_accessor :should_send_click_listeners
+  attr_reader   :driver
   
   def initialize(driver)
     @driver = driver
-    
-    # avoid re-sending large scripts to the same page
-    # i.e. jquery, jquery.autotype
-    @scripts_been_sent = {}
-                            
-    # on click is sent upon every click
-    # to ensure that the event listeners are defined
-    # Some sites dont allow this, which is why it's a togglable boolean
-    @should_send_click_listeners = true
   end
   
   
@@ -153,7 +143,6 @@ class DriverHelpers
   
   # Sends a static script such as jquery
   def send_static_script(path)
-    ensure_current_page_exists
     script = File.read(path)
     driver.execute_script(script)
     return self
@@ -192,6 +181,7 @@ class DriverHelpers
   # TODO figure out if this should be sent every request or not:
   # Currently it **does** because the check is commented out
   # |
+  # |
   # Sends onclick unless window.hasOnClick is true
   def send_on_click_if_undefined
     is_script_loaded = driver.execute_script(
@@ -214,7 +204,6 @@ class DriverHelpers
   # Practically, this stores a client-side reference to the last input/textarea that was clicked.
   # Unless the user manually types CSS selectors (and there's no UI for this), this is mandatory to support text entry.
   def on_click_script
-    ensure_current_page_exists
     script = <<-JS
     window.hasOnClick = true
      $("input, textarea").on("click", function(e) {
