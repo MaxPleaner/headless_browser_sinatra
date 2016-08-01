@@ -4,10 +4,11 @@
 - Is assisted by RoutesInit to set up the headless environment.
 - One route ("/") handles all the interaction with the selenium environment.
   It uses the RouteHelpers module
-- The other routes all have to do with macro recording.
+- Most other routes all have to do with macro recording.
   i.e. recording sequences of selenium commands
   They use the MacroHelpers module
--
+- There are a few routes to handle alerts that occur in selenium,
+  which use a AlertHelpers module
 
 =end
 
@@ -17,6 +18,9 @@ require_relative("./route_helpers.rb")
 # MacroHelpers help with macro routes
 require_relative("./macro_helpers.rb")
 
+# AlertHelpers help with routes relating to selenium alert handling
+require_relative("./alert_helpers.rb")
+
 class Routes < Sinatra::Base
   
   # helper methods for headless environment setup
@@ -25,6 +29,9 @@ class Routes < Sinatra::Base
   # helper methods for macro feature
   include MacroHelpers
   
+  # helper methods for selenium alert handling
+  include AlertHelpers
+  
   # set the root path, used for finding views
   set :root, `pwd`.chomp
 
@@ -32,7 +39,7 @@ class Routes < Sinatra::Base
   get '/' do
     setup_headless_env
     Macro[:status] && add_to_current_macro(params)
-    @screenshot, @error = run_commands_and_handle_errors(params, @screenshot)
+    @screenshot, @error = run_commands_and_handle_errors(params)
     @macros = all_macros
     return erb(:root)
   end
@@ -81,23 +88,20 @@ class Routes < Sinatra::Base
     return continue_macro_run
   end
   
+  # If selenium encounters an alert/confirm/prompt, it needs manual input from the user to resolve it.
+  # This route is for "confirming" the alert, which could potentially include entering text (if it's a prompt)
+  # It uses a method in the AlertHelpers module
+  # If neither this route or "deny_alert" is run after an alert occurs, an error will be run upon the next Javascript execution in selenium.
   get "/confirm_alert" do
-    setup_headless_env
-    text = params[:text]
-    cmd = { 'confirm_alert' => text.blank? ? true : text }
-    @screenshot, @error = run_commands_and_handle_errors(cmd, 'screenshot.jpg')
-    Macro[:status] && add_to_current_macro(cmd)
-    @macros = all_macros
-    return erb(:root)
+    return confirm_alert
   end
   
+  # If selenium encounters an alert/confirm/prompt, it needs manual input from the user to resolve it.
+  # This route is for "denying" the alert
+  # It uses a method in the AlertHelpers module
+  # If neither this route or "confirm_alert" is run after an alert occurs, an error will be run upon the next Javascript execution in selenium.
   get "/deny_alert" do
-    setup_headless_env
-    cmd = { 'deny_alert' => true }
-    @screenshot, @error = run_commands_and_handle_errors(cmd, 'screenshot.jpg')
-    Macro[:status] && add_to_current_macro(cmd)
-    @macros = all_macros
-    return erb(:root)
+    return deny_alert
   end
   
 end

@@ -7,11 +7,13 @@
 <% else %>
   <script>
   $(function(){
-    var pauseBetweenCommandsInterval = 3000 // 3 seconds
+    var pauseBetweenCommands = 5000 // 5 seconds
     function runNextCommand() {
       window.location.href = "http://localhost:4567/continue_macro_run"
     }
-    window.setInterval(runNextCommand, pauseBetweenCommandsInterval)
+    $(function(){
+      window.setTimeout(runNextCommand, pauseBetweenCommands)
+    })
   })
   </script>
 <% end %>

@@ -47,10 +47,7 @@ module MacroRunner
       current_command = Routes::RunningCommand[:cmd].shift
     end
     rescue_headless_errors do
-      @screenshot, @error = run_commands_and_handle_errors(
-        current_command,
-        'screenshot.jpg'
-      )
+      @screenshot, @error = run_commands_and_handle_errors(current_command)
     end
     @running_macro_name = macro_name
     @running_macro_current_command = current_command

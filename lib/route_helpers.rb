@@ -7,20 +7,31 @@
 
 module RouteHelpers
   
+  # runs the commands detailed in the params.
+  # takes a screenshot or returns the most recent screenshot, depending on the command.
   # returns [screenshot_path, error_message]
-  def run_commands_and_handle_errors(params_obj, most_recent_screenshot)
+  def run_commands_and_handle_errors(params_obj)
     rescue_headless_browser_errors_and_messages do
       rescue_selenium_javascript_errors do
-        screenshot_path = execute_commands_and_return_screenshot(
-          params_obj,
-          most_recent_screenshot
-         )
-         error_message = nil
-        [screenshot_path, error_message]
+        ensure_params_contains_a_command(params_obj)
+        screenshot_path = execute_commands_and_return_screenshot(params_obj)
+        [screenshot_path, nil]
       end
     end
   end
   
+  # If the params are empty (i.e. the browser goes to "localhost:4567")
+  # prevent any screenshot being taken by raising a HeadlessBrowserMessage
+  # This gets rescued by "rescue_headless_browser_errors_and_messages" to show the most recent screenshot, if one exists
+  def ensure_params_contains_a_command(params_obj)
+    unless self.class::Browser.valid_commands_list.any? { |key| params_obj[key.to_s] }
+      raise(HeadlessBrowserMessage, "")
+    end
+  end
+  
+  # Run a block of code and handle the case when Selenium throws an error
+  # When rescuing these errors, a HeadlessBrowserError message is thrown
+  # which is in turn rescued by "rescue_headless_browser_errors_and_messages"
   def rescue_selenium_javascript_errors(&blk)
     begin
       blk.call
@@ -36,6 +47,7 @@ module RouteHelpers
     end
   end
   
+  # rescue HeadlessBrowserError and HeadlessBrowserMessages by displaying the message and displaying the most recent screenshot
   def rescue_headless_browser_errors_and_messages(&blk)
     begin
       blk.call
@@ -53,16 +65,14 @@ module RouteHelpers
   end
 
   # execute commands on the headless browser by interpreting the params
-  def execute_commands_and_return_screenshot(params_obj, most_recent_screenshot)
-    # generate a new screenshot or don't, depending on the commands being run
-    should_send_screenshot = self.class::Browser.process_params(params_obj)
-    prevent_unhandled_alert_errors!
-    if should_send_screenshot
-      self.class::Browser.driver_helpers.sync_scripts
-      return self.class::Browser.screenshot
-    else
-      return most_recent_screenshot
-    end
+  # Some command raise a HeadlessBrowserError or HeadlessBrowserMessage,
+  # in which case the screenshot will not be taken.
+  # A rescue block in "rescue_headless_browser_errors_and_messages" will handle these cases.
+  def execute_commands_and_return_screenshot(params_obj)
+    self.class::Browser.driver_helpers.sync_scripts
+    self.class::Browser.process_params(params_obj)
+    prevent_unhandled_alert_errors! # check for alerts after running commands so that the UI can be updated
+    return self.class::Browser.screenshot
   end
   
   # can't wait for selenium to throw an error about alerts because at that
@@ -78,7 +88,7 @@ module RouteHelpers
       end
       text = alert.text
       message = instructions_for_manually_handling_alert(text)
-      raise(HeadlessBrowserError, message)
+      raise(HeadlessBrowserMessage, message)
     else
       return self
     end

@@ -52,19 +52,14 @@ class HeadlessBrowser
     return driver
   end
   
-  # Set the default number of seconds to delay taking a screenshot
-  def self.default_screenshot_delay
-    # Adding a few seconds delay ensures the headless browser
-    # has completed any UI changes
-    return 2
-  end
-  
   # HeadlessBrowser initializer
   def initialize(headless_env, driver)
     @headless_env     = headless_env
     @driver           = driver
     @driver_helpers   = DriverHelpers.new(@driver)
     @screenshot_delay = self.class.default_screenshot_delay
+    # when the app starts, delete any remnant screenshot from a previous session
+    `rm public/screenshot.jpg`
   end
   
   attr_reader   :headless_env,
@@ -74,84 +69,86 @@ class HeadlessBrowser
   attr_accessor :screenshot_delay
   
   # Interpret parameters from routes and run commands accordingly
-  # returns a boolean indicating whether a screenshot should be taken or not
   def process_params(params_obj)
     given_params = transform_params(params_obj)
     # execute each of the commands and track whether the command calls for a screenshot
-    should_take_screenshot_results = given_params.map do |name, val|
+    given_params.each do |name, val|
       val && send_param(name, val)
     end
-    return should_take_screenshot_results.any?
+    return self
   end
   
-  # transform the params object
+  # transform the params object.
+  # makes the params keys symbols
+  # and prepares the "click_coords" value, i.e. transforming it from "123,123" to ["123","123"]
   def transform_params(params_obj)
     params_with_symbol_keys = make_hash_keys_symbols(params_obj)
     return params_with_symbol_keys.merge(
-      coords: params_with_symbol_keys[:click_coords]&.split(",")
+      click_coords: params_with_symbol_keys[:click_coords]&.split(",")
     )
   end
   
+  # Takes a hash and tries to convert all its keys to symbols.
+  # Will throw an error if this is not possible.
   def make_hash_keys_symbols(hash)
     return hash.reduce({}) { |memo,(k,v)| memo.tap { |m| m[k.to_sym] = v } }
   end
   
   # Run the command indicated by a particular param
-  # Returns a bool indicating whether the command calls for a screenshot
   def send_param(name, val)
     return case name
-    when :coords
+    when :click_coords
       @driver_helpers.click_coords(val[0], val[1])
       true
     when :url
       val = url_is_really_url?(val) ? val : make_url(val)
       @driver_helpers.navigate(val)
-      true
     when :enter_text
       @driver_helpers.enter_text(val)
-      true
     when :refresh
       @driver_helpers.refresh
-      true
-    when :delay_screenshot
-      @screenshot_delay = val.to_i
-      false
-    when :reenable_on_click_script
-      @driver_helpers.should_send_click_listeners = true
-      false
     when :custom_script
       @driver_helpers.driver.execute_script(val)
-      true
     when :confirm_alert
-      text = val.eql?(true) ? nil : val
-      driver = @driver_helpers.driver
-      alert = driver.switch_to.alert rescue nil
-      if !alert
-        raise(HeadlessBrowserError, "Cant confirm alert. None was found")
-      end
-      begin
-        alert.send_keys(text) if text
-        alert.accept
-        raise(HeadlessBrowserMessage, "Accepted alert")
-      rescue StandardError => e
-        raise(HeadlessBrowserError, e)
-      end
-      true
+      process_confirm_alert_cmd(val)
     when :deny_alert
-      driver = @driver_helpers.driver
-      alert = driver.switch_to.alert rescue nil
-      if !alert
-        raise(HeadlessBrowserError, "Cant deny alert. None was found")
-      end
-      begin
-        alert.dismiss
-        raise(HeadlessBrowserMessage, "Dismissed alert")
-      rescue StandardError => e
-        raise(HeadlessBrowserError, e)
-      end
-      false
+      process_deny_alert_cmd
     end
-        
+  end
+  
+  def valid_commands_list
+    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert]
+  end
+  
+  # If there's a pending alert, confirm it (possibly send it text as well)
+  def process_confirm_alert_cmd(text)
+    text = text.eql?(true) ? nil : text
+    driver = @driver_helpers.driver
+    alert = driver.switch_to.alert rescue nil
+    if !alert
+      raise(HeadlessBrowserError, "Cant confirm alert. None was found")
+    end
+    begin
+      alert.send_keys(text) if text
+      alert.accept
+    rescue StandardError => e
+      raise(HeadlessBrowserError, e)
+    end
+  end
+  
+  # If there's a pending alert, deny it
+  def process_deny_alert_cmd
+    driver = @driver_helpers.driver
+    alert = driver.switch_to.alert rescue nil
+    if !alert
+      raise(HeadlessBrowserError, "Cant deny alert. None was found")
+    end
+    begin
+      alert.dismiss
+    rescue StandardError => e
+      raise(HeadlessBrowserError, e)
+    end
+    return self
   end
 
 
@@ -160,13 +157,25 @@ class HeadlessBrowser
     # the path sent to clients
     client_screenshot_path = "screenshot.jpg"
     # true location
-    screenshot_path = "#{`pwd`.chomp}/public/#{client_screenshot_path}"
+    screenshot_path = "public/#{client_screenshot_path}"
     `rm #{screenshot_path}`
-    sleep @screenshot_delay
+    driver_helpers.sync_scripts
+    wait_until_document_is_ready
     driver.save_screenshot(screenshot_path)
     return client_screenshot_path
   end
   
+  # don't send screenshots too early.
+  def wait_until_document_is_ready
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    script = <<-JS
+      window.isDocumentPrepared = false
+      $(function(){window.isDocumentPrepared = true})
+      return window.isDocumentPrepared
+    JS
+    wait.until { driver_helpers.driver.execute_script(script) }
+  end
+
   # A pretty lenient check to see if a url is valid
   def url_is_really_url?(url)
     return ["http", "www.", ".com", ".net", ".org", ".edu"].any? do |str|

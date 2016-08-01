@@ -47,10 +47,10 @@ class DriverHelpers
   # Send the browser to a web page
   def navigate(url)
     driver.navigate.to(url)
-    sync_scripts
     return self
   end
   
+  # send a bunch of scripts to the client
   def sync_scripts
     send_jquery_if_undefined
     send_jquery_autotype_if_undefined
