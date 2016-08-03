@@ -48,7 +48,12 @@ class HeadlessBrowser
   # Create a firefox driver that can be passed to HeadlessBrowser.new
   def self.start_driver
     set_firefox_binary_path!
-    driver = Selenium::WebDriver.for(:firefox)
+    profile = Selenium::WebDriver::Firefox::Profile.new
+    profile["browser.download.folderList"] = 2
+    profile["browser.download.manager.showWhenStarting"] = false
+    profile["browser.download.dir"] = "/home/max/Downloads"
+    profile["browser.helperApps.neverAsk.saveToDisk"] = "application/vnd.ms-excel, text/csv, application/csv"
+    driver = Selenium::WebDriver.for :firefox, :profile => profile
     return driver
   end
   
