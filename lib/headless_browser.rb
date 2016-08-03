@@ -52,9 +52,28 @@ class HeadlessBrowser
     profile["browser.download.folderList"] = 2
     profile["browser.download.manager.showWhenStarting"] = false
     profile["browser.download.dir"] = "/home/max/Downloads"
-    profile["browser.helperApps.neverAsk.saveToDisk"] = "application/vnd.ms-excel, text/csv, application/csv"
+    profile["browser.helperApps.neverAsk.saveToDisk"] = self.accepted_mime_types_for_download
     driver = Selenium::WebDriver.for :firefox, :profile => profile
     return driver
+  end
+
+  def self.accepted_mime_types_for_download
+    [ 
+      "application/vnd.ms-exceltext/csv",
+      "application/csv",
+      "application/zip",
+      "text/csv",
+      "application/x-msexcel",
+      "application/excel",
+      "application/x-excel",
+      "application/vnd.ms-excel",
+      "image/png",
+      "image/jpeg",
+      "text/html",
+      "text/plain",
+      "application/msword",
+      "application/xml"
+    ].join(",")
   end
   
   # HeadlessBrowser initializer
