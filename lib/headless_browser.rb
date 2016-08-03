@@ -27,6 +27,7 @@ require_relative("./driver_helpers.rb")
 
 # Define a class which loads a headless Firefox browser using selenium
 class HeadlessBrowser
+  DownloadDestinationPath = "/home/max/Downloads"
   
   def self.headless_with_customization
     return Headless.new
@@ -51,7 +52,7 @@ class HeadlessBrowser
     profile = Selenium::WebDriver::Firefox::Profile.new
     profile["browser.download.folderList"] = 2
     profile["browser.download.manager.showWhenStarting"] = false
-    profile["browser.download.dir"] = "/home/max/Downloads"
+    profile["browser.download.dir"] = DownloadDestinationPath
     profile["browser.helperApps.neverAsk.saveToDisk"] = self.accepted_mime_types_for_download
     driver = Selenium::WebDriver.for :firefox, :profile => profile
     return driver
