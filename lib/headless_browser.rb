@@ -199,7 +199,6 @@ class HeadlessBrowser
   def wait_until_document_is_ready
     wait = Selenium::WebDriver::Wait.new(:timeout => 10)
     script = <<-JS
-      window.isDocumentPrepared = false
       $(function(){window.isDocumentPrepared = true})
       return window.isDocumentPrepared
     JS
