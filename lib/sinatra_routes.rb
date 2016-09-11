@@ -32,10 +32,13 @@ class Routes < Sinatra::Base
   # helper methods for selenium alert handling
   include AlertHelpers
   
+  
+  binding.pry
+
   # set the root path, used for finding views
   set :root, `pwd`.chomp
   
-  set :port, AppPort
+  set :port, AppPort.to_i
   set :bind, AppHost
 
   # root route, handles all selenium interaction
