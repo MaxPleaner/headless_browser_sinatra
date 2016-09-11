@@ -1,12 +1,9 @@
 =begin docs
-
 - This file defines a HeadlessBrowser class which is the main component of the app.
 - It is used by the Sinatra routes to run commands on a selenium firefox browser and take screenshots.
 - It is required by lib/server_deps.rb.
 - It relies on lib/driver_helpers.rb to do a lot of the work when running commands.
-
 - Typical Usage:
-
   # instantiate the browser
   browser = HeadlessBrowser.new(
     HeadlessBrowser.start_headless,
@@ -59,7 +56,7 @@ class HeadlessBrowser
   end
 
   def self.accepted_mime_types_for_download
-    [ 
+    [
       "application/vnd.ms-exceltext/csv",
       "application/csv",
       "application/zip",
@@ -102,14 +99,22 @@ class HeadlessBrowser
     return self
   end
   
-  # transform the params object.
-  # makes the params keys symbols
-  # and prepares the "click_coords" value, i.e. transforming it from "123,123" to ["123","123"]
+  # Transform the params object.
+  # Makes the params keys symbols
+  # Special cases some commands which take arguments
   def transform_params(params_obj)
     params_with_symbol_keys = make_hash_keys_symbols(params_obj)
-    return params_with_symbol_keys.merge(
-      click_coords: params_with_symbol_keys[:click_coords]&.split(",")
-    )
+    if params_with_symbol_keys.has_key?(:click_coords)
+      params_with_symbol_keys.merge(
+        click_coords: params_with_symbol_keys[:click_coords]&.split(",")
+      )
+    elsif params_with_symbol_keys.has_key?(:switch_frame)
+      params_with_symbol_keys.merge(
+        switch_frame: params_with_symbol_keys[:num]
+      )
+    else
+      params_with_symbol_keys
+    end
   end
   
   # Takes a hash and tries to convert all its keys to symbols.
@@ -126,7 +131,6 @@ class HeadlessBrowser
       @driver_helpers.click_coords(val[0], val[1])
       true
     when :url
-      val = url_is_really_url?(val) ? val : make_url(val)
       @driver_helpers.navigate(val)
     when :enter_text
       @driver_helpers.enter_text(val)
@@ -138,6 +142,8 @@ class HeadlessBrowser
       process_confirm_alert_cmd(val)
     when :deny_alert
       process_deny_alert_cmd
+    when :switch_frame
+      process_switch_frame_cmd(val)
     when :restart_browser
       @driver_helpers.driver.close
       @driver_helpers.instance_variable_set(:@driver, Selenium::WebDriver.for(:firefox))
@@ -147,7 +153,20 @@ class HeadlessBrowser
   end
   
   def valid_commands_list
-    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert, :restart_browser]
+    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert, :restart_browser, :switch_frame]
+  end
+  
+  # switch to a different iframe
+  # if given_num is blank, switch to the main document
+  def process_switch_frame_cmd(given_num)
+    num = given_num.to_i
+    driver = @driver_helpers.driver
+    if num == 321
+      driver.switch_to.default_content
+    else
+      driver.switch_to.frame(num)
+    end
+    self
   end
   
   # If there's a pending alert, confirm it (possibly send it text as well)
@@ -164,6 +183,7 @@ class HeadlessBrowser
     rescue StandardError => e
       raise(HeadlessBrowserError, e)
     end
+    self
   end
   
   # If there's a pending alert, deny it
@@ -190,7 +210,12 @@ class HeadlessBrowser
     screenshot_path = "public/#{client_screenshot_path}"
     `rm #{screenshot_path}`
     driver_helpers.sync_scripts
-    wait_until_document_is_ready
+    begin
+      wait_until_document_is_ready
+    rescue Selenium::WebDriver::Error::TimeOutError
+      # the document is not ready in 10 seconds for some reason
+      # send a screenshot anyway
+    end
     driver.save_screenshot(screenshot_path)
     return client_screenshot_path
   end
@@ -204,21 +229,7 @@ class HeadlessBrowser
     JS
     wait.until { driver_helpers.driver.execute_script(script) }
   end
-
-  # A pretty lenient check to see if a url is valid
-  def url_is_really_url?(url)
-    return ["http", "www.", ".com", ".net", ".org", ".edu"].any? do |str|
-      url.include?(str)
-    end
-  end
-  
-  # Turns "gmail" into "http://gmail.com", for example
-  def make_url(txt)
-    return "http://#{txt}.com"
-  end
   
 end
-
-
 
 
