@@ -20,8 +20,8 @@ unless `ls`.chomp.include?("start_server.rb")
 end
 
 # Set the base url using environment variables, if given.
-# defaults to "http://localhost:4567"
-AppHost = ENV["APP_HOST"] || "http://localhost"
+# defaults to "localhost:4567"
+AppHost = ENV["APP_HOST"] || "localhost"
 AppPort = ENV["APP_PORT"] || "4567"
 AppBaseUrl = "#{AppHost}:#{AppPort}"
 
