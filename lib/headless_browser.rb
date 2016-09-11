@@ -144,6 +144,8 @@ class HeadlessBrowser
       process_deny_alert_cmd
     when :switch_frame
       process_switch_frame_cmd(val)
+    when :custom_selenium
+      eval(val)
     when :restart_browser
       @driver_helpers.driver.close
       @driver_helpers.instance_variable_set(:@driver, Selenium::WebDriver.for(:firefox))
@@ -153,7 +155,8 @@ class HeadlessBrowser
   end
   
   def valid_commands_list
-    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert, :restart_browser, :switch_frame]
+    [:click_coords, :url, :enter_text, :refresh, :custom_script, :confirm_alert, :deny_alert, :restart_browser, :switch_frame,
+     :custom_selenium]
   end
   
   # switch to a different iframe
@@ -231,5 +234,4 @@ class HeadlessBrowser
   end
   
 end
-
 
