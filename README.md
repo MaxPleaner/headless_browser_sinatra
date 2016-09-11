@@ -11,7 +11,7 @@ Installation:
 Usage:
 
  1. `ruby start_server.rb`
- 2. Set `ENV["APP_PORT"]` (defaults to 4567) and `ENV["APP_HOST"]` (defaults to http://localhost) 
+ 2. Set `ENV["APP_PORT"]` (defaults to 4567) and `ENV["APP_HOST"]` (defaults to localhost) 
  2. visit the root url in the browser
 
 About:
