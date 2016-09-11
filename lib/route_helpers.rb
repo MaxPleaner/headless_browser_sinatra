@@ -20,7 +20,7 @@ module RouteHelpers
     end
   end
   
-  # If the params are empty (i.e. the browser goes to "localhost:4567")
+  # If the params are empty,
   # prevent any screenshot being taken by raising a HeadlessBrowserMessage
   # This gets rescued by "rescue_headless_browser_errors_and_messages" to show the most recent screenshot, if one exists
   def ensure_params_contains_a_command(params_obj)
