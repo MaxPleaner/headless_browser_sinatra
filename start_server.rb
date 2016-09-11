@@ -5,7 +5,8 @@
 - This is the entry point to the program.
 - First run "sh install.sh" then "bundle" to install the dependencies.
 - Then run "ruby start_server.rb".
-- This will start a Sinatra app at localhost:4567.
+- This will start a Sinatra app at localhost:4567 by default.
+# The root url can be changed with the APP_PORT (defualts to 4567) and APP_HOST (defaults to http://localhost) 
 - To interact with the app, visit this address in a browser.
 
 =end
