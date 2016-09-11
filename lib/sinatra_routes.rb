@@ -34,6 +34,9 @@ class Routes < Sinatra::Base
   
   # set the root path, used for finding views
   set :root, `pwd`.chomp
+  
+  set :port, AppPort
+  set :bind, AppHost
 
   # root route, handles all selenium interaction
   get '/' do
