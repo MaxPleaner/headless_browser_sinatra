@@ -34,7 +34,7 @@
       var offset = $(this).offset();
       var x = e.pageX - offset.left;
       var y = e.pageY - offset.top;
-      window.location = `http://localhost:4567?click_coords=${x},${y}`
+      window.location = `<%= AppBaseUrl %>?click_coords=${x},${y}`
     });
   })
   
